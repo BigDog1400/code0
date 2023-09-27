@@ -1,4 +1,4 @@
-import { WebContainerClient } from '../_components/webcontainerClient'
+import { WebContainerClient } from "@/app/_components/webcontainerClient"
 
 export default function WebContainerLayout({
   children,
@@ -8,13 +8,8 @@ export default function WebContainerLayout({
   return (
     <div className='min-h-screen'>
         {children}
-        {/* Center on the bottom */}
         <div className='flex justify-center'>
-
-        <WebContainerClient 
-        
-        
-        />
+          <WebContainerClient/>
         </div>
     </div>
   )

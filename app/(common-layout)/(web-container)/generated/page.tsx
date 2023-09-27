@@ -8,7 +8,7 @@ export default function Page() {
         <h1>
         Hello, Dashboard Page!
         </h1>
-        <Link href="/form">
+        <Link href="/">
             Go to Form
         </Link>
     </main>
