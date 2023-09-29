@@ -9,10 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@typegoose/typegoose": "^11.5.0",
+    "@web-std/file": "^3.0.3",
     "@webcontainer/api": "^1.1.5",
+    "axios": "^1.5.1",
+    "imagescript": "^1.2.16",
+    "mongoose": "^7.5.3",
     "next": "latest",
+    "puppeteer": "^21.3.5",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-query": "^3.39.3",
+    "sharp": "^0.32.6",
+    "web3.storage": "^4.5.5"
   },
   "devDependencies": {
     "@types/node": "latest",
