@@ -1,15 +1,13 @@
 {
   "name": "code0",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "turbo dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@typegoose/typegoose": "^11.5.0",
     "@web-std/file": "^3.0.3",
@@ -35,7 +33,6 @@
     "eslint-config-prettier": "^9.0.0",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "typescript": "latest",
-    "turbo": "^1.10.14"
+    "typescript": "latest"
   }
 }
