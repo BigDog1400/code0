@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { PromptInputForm } from '../_components/promp-input-form';
 
 const FAKE_COMPONENTS_DATA = [
   {
@@ -27,15 +28,7 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center justify-center w-full h-72 gap-4">
-        <div className="flex items-center justify-center w-[40rem] h-16 gap-4">
-          <div className="flex items-center justify-center w-12 h-12 text-xl text-gray-800  rounded-3xl">
-            <span>🔍</span>
-          </div>
-          <input
-            className="flex-1 h-12 px-4 text-lg font-bold text-gray-800 bg-gray-100 rounded-3xl"
-            placeholder="A component that..."
-          />
-        </div>
+        <PromptInputForm />
       </div>
 
       <div className="grid grid-cols-3 gap-8">
