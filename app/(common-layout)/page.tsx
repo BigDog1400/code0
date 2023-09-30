@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 
@@ -43,7 +42,7 @@ export default function Home() {
       {
                     FAKE_COMPONENTS_DATA.map((component, index) => (
           <div key={index} className='flex flex-col items-center justify-between p-2 rounded-md'>
-            <Link href={`/generated?componentId=${component.id}`}>
+            <Link href={`/generated/${component.id}`}>
             <div className='w-72 h-72 bg-gray-200 rounded-md'></div>
             </Link>
             <div className='flex items-center justify-center w-72 h-10 mt-4 gap-2'>
