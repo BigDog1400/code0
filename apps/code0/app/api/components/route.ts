@@ -1,5 +1,5 @@
 import clientPromise from "@/lib/database";
-import { GeneratedComponentModel } from "@/app/_models/coponent"
+import { GeneratedComponentModel } from "@/app/_models/component"
 
 export const GET = async () => {
     await clientPromise;
