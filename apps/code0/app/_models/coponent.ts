@@ -1,7 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
+
+interface IGeneraatedComponent {
+  componentId: string;
+  slug: string;
+  name: string;
+  prompt: string;
+  timestamp: Date;
+  version: string;
+  code: string;
+};
 
 // Define a schema for the data
-export const GeneratedComponentSchema = new mongoose.Schema({
+export const GeneratedComponentSchema = new mongoose.Schema<IGeneraatedComponent>({
   componentId: {
     type: String,
     required: true,
@@ -33,6 +43,6 @@ export const GeneratedComponentSchema = new mongoose.Schema({
 });
 
 // Create a Mongoose model using the schema
-export const GeneratedComponentModel =
+export const GeneratedComponentModel: Model<IGeneraatedComponent> =
   mongoose.models.GeneratedComponent ||
   mongoose.model("GeneratedComponent", GeneratedComponentSchema);
