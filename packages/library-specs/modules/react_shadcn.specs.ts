@@ -116,9 +116,13 @@ const getSpecsFromDocsAndExamples = async () => {
 
   return docsSpecs.filter((e) => e);
 };
-export const getDocsSpecs = async (): Promise<IGenericLibrary> => ({
-  clone: 'https://github.com/shadcn-ui/ui',
+export const getDocsSpecs = (): IGenericLibrary => ({
+  clone: {
+	path: "shadcn",
+	repo: "https://github.com/shadcn-ui/ui",
+	branch: "main",
+  },
   framework: "react",
   library: "shadcn-ui",
-  specs: await getSpecsFromDocsAndExamples(),
+  specs: () => getSpecsFromDocsAndExamples(),
 });

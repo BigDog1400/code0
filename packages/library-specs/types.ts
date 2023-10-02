@@ -20,14 +20,19 @@ export interface IGenericLibrarySpec {
 }
 
 export interface IGenericLibraryClone {
-  name: string;
+  path: string;
   repo: string;
+  branch?: string;
 }
 
 export interface IGenericLibrary {
-  clone?: string;
+  clone?: IGenericLibraryClone;
   framework: AllowedFramework;
   library: string;
+  specs: () => Promise<IGenericLibrarySpec[]>;
+}
+
+export interface IGenericLibraryWithSpecs extends Omit<IGenericLibrary, "specs"> {
   specs: IGenericLibrarySpec[];
 }
 
