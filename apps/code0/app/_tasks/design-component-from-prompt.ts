@@ -4,13 +4,16 @@ import db_shadcn from '../../shadcn_dump.json';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/index.mjs';
 import clientPromise from '@/lib/database';
 import { ComponentDesignModel } from '../_models/component-design';
+import { GenericLibraryModel } from '../_models/library';
 // Add interface for function parameters
 interface DesignComponentFromPromptParams {
   description: string;
   generationId: string;
+  framework: string;
+  libraries: string[]
 }
 
-const components_schema = {
+const getComponentSchema = async (framework: string, libraries: string[]) => ({
   type: 'object',
   properties: {
     name: {
@@ -19,7 +22,7 @@ const components_schema = {
     description: {
       type: 'string',
       description:
-        'Write a description for the React component design task based on the user query. Stick strictly to what the user wants in their request - do not go off track',
+        `Write a description for the ${framework} component design task based on the user query. Stick strictly to what the user wants in their request - do not go off track`,
     },
     // icons: {
     //   type: 'object',
@@ -60,7 +63,12 @@ const components_schema = {
         properties: {
           name: {
             type: 'string',
-            enum: db_shadcn.map((e) => e.name),
+            enum: (await GenericLibraryModel.find({
+              framework: framework,
+              library: {
+                $in: libraries,
+              }
+            })).flatMap((e) => e.specs).map((e) => e.name),
           },
           reason: {
             type: 'string',
@@ -71,12 +79,12 @@ const components_schema = {
     },
   },
   required: ['name', 'description'],
-};
-const context: ChatCompletionMessageParam[] = [
+});
+const getContext = async (framework: string, libraries: string[]): Promise<ChatCompletionMessageParam[]> => ([
   {
     role: 'system',
     content:
-      `Your task is to design a new React component for a web app, according to the user's request.\n` +
+      `Your task is to design a new ${framework} component for a web app, according to the user's request.\n` +
       `If you judge it is relevant to do so, you can specify pre-made library components to use in the task.\n` +
       `You can also specify the use of icons if you see that the user's request requires it.`,
   },
@@ -84,20 +92,30 @@ const context: ChatCompletionMessageParam[] = [
     role: `user`,
     content:
       'Multiple library components can be used while creating a new component in order to help you do a better design job, faster.\n\nAVAILABLE LIBRARY COMPONENTS:\n```\n' +
-      db_shadcn
+      (await GenericLibraryModel.find({
+        framework: framework,
+        library: {
+          $in: libraries,
+        }
+      })).flatMap((e) =>
+        {return e.specs})
         .map((e) => {
           return `${e.name} : ${e.description.slice(0, -1)};`;
         })
         .join('\n') +
       '\n```',
   },
-];
+]);
 
 export async function designComponentFromPrompt({
   description,
   generationId,
+  libraries,
+  framework
 }: DesignComponentFromPromptParams) {
   await clientPromise;
+
+  const context = await getContext(framework, libraries);
 
   context.push({
     role: `user`,
@@ -105,7 +123,7 @@ export async function designComponentFromPrompt({
       'USER QUERY : \n```\n' +
       description +
       '\n```\n\n' +
-      `Design the new React web component task for the user as the creative genius you are`,
+      `Design the new ${framework} web component task for the user as the creative genius you are`,
   });
 
   const gptPrompt = {
@@ -115,7 +133,7 @@ export async function designComponentFromPrompt({
       {
         name: `design_new_component_api`,
         description: `generate the required design details to create a new component`,
-        parameters: components_schema,
+        parameters: await getComponentSchema(framework, libraries),
       },
     ],
   };
@@ -169,6 +187,8 @@ export async function designComponentFromPrompt({
         reason,
       })) || [],
   };
+
+  console.log(componentDesignResult)
 
   debugger;
   const componentDesignInstance = new ComponentDesignModel({

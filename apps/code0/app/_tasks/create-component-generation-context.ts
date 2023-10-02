@@ -1,12 +1,14 @@
 import { ChatCompletionMessageParam } from 'openai/resources/chat/index.mjs';
 import { ComponentDesign } from '../_interfaces/component-design';
-import { ragShadcn } from '../_rag/shadcn';
+import { ragLibrary } from '../_rag/library';
 import { get_encoding } from '@dqbd/tiktoken';
+import { AllowedFramework } from '../_models/library';
 
 const tiktokenEncoder = get_encoding('cl100k_base');
 
 interface ComponentGenerationContextParams {
   componentDesign: ComponentDesign;
+  framework: AllowedFramework;
 }
 
 export async function createComponentGenerationContext(
@@ -19,10 +21,11 @@ export async function createComponentGenerationContext(
         //   await rag_library_components.run({
         //     library_components: query.library_components.map(e=>e.name),
         //   })
-        await ragShadcn({
+        await ragLibrary({
           library_components: params.componentDesign.libraries.map(
             (e) => e.name,
           ),
+          framework: params.framework,
         }),
     //         icons : !query.icons
     //         ? []
@@ -31,6 +34,8 @@ export async function createComponentGenerationContext(
     //         ? []
     icons: [], // for now we are going to ignore icons until we have a better way to handle them using the RAG
   };
+
+  console.log(params.componentDesign.libraries);
 
   // We need to limit the number of examples we use for each library component
   retrievedContext.components = retrievedContext.components.map((e, idx) => {
@@ -66,7 +71,7 @@ export async function createComponentGenerationContext(
       return {
         role: `user`,
         content:
-          `Library components can be used while making the new React component\n\n` +
+          `Library components can be used while making the new ${params.framework} component\n\n` +
           `Suggested library component (${idx + 1}/${
             params.componentDesign.libraries.length
           }) : ${e.name} - ${e.description}\n` +
@@ -82,7 +87,7 @@ export async function createComponentGenerationContext(
             })
             .join(`\n\n`) +
           '\n\n---\n\n' +
-          `# full code examples of React components that use ${e.name} :\n` +
+          `# full code examples of ${params.framework} components that use ${e.name} :\n` +
           e.docs.examples
             .map((example) => {
               return example.source + '```\n' + example.code.trim() + '\n```';

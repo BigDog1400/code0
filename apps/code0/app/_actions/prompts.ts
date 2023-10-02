@@ -5,32 +5,55 @@ import { createComponentGenerationContext } from '../_tasks/create-component-gen
 import { generateComponent } from '../_tasks/generate-component';
 import clientPromise from '@/lib/database';
 import { nanoid } from 'nanoid';
+import { AllowedFramework } from '../_models/library';
+import registeredTemplates from '../_templates/index';
+
+const frameworkMap: Record<AllowedFramework, string> = {
+  react: 'React',
+  vue: 'Vue',
+  svelte: 'Svelte',
+};
+
 export async function processPrompt(prevState: any, formData: FormData) {
   await clientPromise;
   const schema = z.object({
     prompt: z.string().nonempty(),
+    framework: z.string().nonempty().refine(
+      (val) => Object.keys(frameworkMap).includes(val),
+    ),
+    template: z.string().nonempty(),
   });
 
   try {
     const data = schema.parse({
       prompt: formData.get('prompt'),
+      framework: formData.get('framework') as AllowedFramework,
+      template: formData.get('template'),
     });
     const generationId = nanoid();
+
+    const libraries = registeredTemplates[data.framework as AllowedFramework].find(
+      (e) => e.name === data.template,
+    )?.specs || [];
 
     try {
       // TODO: how can we abstract this so that we can use multiple different models? (also, should we use multiple different models?)
       const designComponent = await designComponentFromPrompt({
         description: data.prompt,
         generationId,
+        libraries,
+        framework: data.framework,
       });
 
       const componentTaskContext = await createComponentGenerationContext({
         componentDesign: designComponent,
+        framework: data.framework as AllowedFramework,
       });
 
       const code = await generateComponent({
         context: componentTaskContext,
         componentDesign: designComponent,
+        framework: frameworkMap[data.framework as AllowedFramework],
         generationId,
       });
 

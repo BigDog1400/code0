@@ -11,25 +11,26 @@ interface ComponentGenerationContextParams {
   componentDesign: ComponentDesign;
   context: ChatCompletionMessageParam[];
   generationId: string;
+  framework: string;
 }
 
-const FIRST_CONTEXT_ENTRY: ChatCompletionMessageParam = {
+const getFiirstContextEntry = (framework: string): ChatCompletionMessageParam => ({
   role: `system`,
   content:
-    `You are an expert at writing React components.\n` +
-    `Your task is to write a new React component for a web app, according to the provided task details.\n` +
-    `The React component you write can make use of Tailwind classes for styling (in className).\n` +
+    `You are an expert at writing ${framework} components.\n` +
+    `Your task is to write a new ${framework} component for a web app, according to the provided task details.\n` +
+    `The ${framework} component you write can make use of Tailwind classes for styling (in className).\n` +
     `If you judge it is relevant to do so, you can use library components and icons.\n\n` +
-    `You will write the full React component code, which should include all imports.` +
-    `Your generated code will be directly written to a .tsx React component file and used in production.`,
-};
+    `You will write the full ${framework} component code, which should include all imports.` +
+    `Your generated code will be directly written to a .tsx ${framework} component file and used in production.`,
+});
 
 export async function generateComponent(
   params: ComponentGenerationContextParams,
 ) {
   await clientPromise;
   const context: ChatCompletionMessageParam[] = [
-    FIRST_CONTEXT_ENTRY,
+    getFiirstContextEntry(params.framework),
     ...params.context,
     {
       role: `user`,
@@ -43,13 +44,13 @@ export async function generateComponent(
         '```\n' +
         params.componentDesign.description.by_llm +
         '\n```\n\n\n' +
-        `Write the full code for the new React web component, which uses Tailwind classes in className if needed (add tailwind dark: classes too if you can), and optionally, library components and icons, based on the provided design task.\n` +
-        'The full code of the new React component that you write will be written directly to a .tsx file inside the React project. Make sure all necessary imports are done, and that your full code is enclosed with tsx``` blocks. Answer with generated code only, DO NOT ADD ANY EXTRA TEXT DESCRIPTION OR COMMENTS BESIDES THE CODE. YOUR ANSWER CONTAINS CODE ONLY ! COMPONENT CODE ONLY !\n' +
+        `Write the full code for the new ${params.framework} web component, which uses Tailwind classes in className if needed (add tailwind dark: classes too if you can), and optionally, library components and icons, based on the provided design task.\n` +
+        'The full code of the new ${params.framework} component that you write will be written directly to a .tsx file inside the ${params.framework} project. Make sure all necessary imports are done, and that your full code is enclosed with tsx``` blocks. Answer with generated code only, DO NOT ADD ANY EXTRA TEXT DESCRIPTION OR COMMENTS BESIDES THE CODE. YOUR ANSWER CONTAINS CODE ONLY ! COMPONENT CODE ONLY !\n' +
         `Important :\n` +
         `- DO NOT USE LIBRARIES OR IMPORTS OUTSIDE OF WHAT IS PROVIDED IN THIS TASK; otherwise it would crash the component because not installed. DO NOT IMPORT EXTRA LIBRARIES BESIDES WHAT IS PROVIDED ABOVE!\n` +
         `- DO NOT HAVE ANY DYNAMIC DATA! Components are meant to be working as is without supplying any variable to them when importing them ! ONLY WRITE A COMPONENT THAT RENDER DIRECTLY WITH PLACEHOLDERS AS DATA, COMPONENT NOT SUPPLIED WITH ANY DYNAMIC DATA.\n` +
-        `- Only write the code for the component; Do not write extra code to import it! The code will directly be stored in an individual React .tsx file !\n` +
-        `Write the React component code as the creative genius and React component genius you are - with good ui formatting.\n`,
+        `- Only write the code for the component; Do not write extra code to import it! The code will directly be stored in an individual ${params.framework} .tsx file !\n` +
+        `Write the ${params.framework} component code as the creative genius and ${params.framework} component genius you are - with good ui formatting.\n`,
     },
   ];
 

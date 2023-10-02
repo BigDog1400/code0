@@ -38,7 +38,6 @@ const getSpecsFromDocsAndExamples = async () => {
 
   for await (const file of shadcn_docs_files) {
     const slug = file.name.split(".mdx")[0];
-    console.log(slug);
     const meta = {
       title: "",
       description: "",

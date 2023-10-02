@@ -6,6 +6,8 @@ import { processPrompt } from '@/app/_actions/prompts';
 
 const initialState = {
   message: '',
+  template: 'Shadcn + Lucide',
+  framework: 'react',
 };
 
 function SubmitButton() {
@@ -36,6 +38,8 @@ export function PromptInputForm() {
             type="text"
             name="prompt"
           />
+          <input type="text" name="template" hidden value="Vue + Chakra" />
+          <input type="text" name="framework" hidden value="vue" />
           <SubmitButton />
         </div>
       </div>
