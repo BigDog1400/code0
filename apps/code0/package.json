@@ -9,19 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dqbd/tiktoken": "^1.0.7",
     "@typegoose/typegoose": "^11.5.0",
     "@web-std/file": "^3.0.3",
     "@webcontainer/api": "^1.1.5",
     "axios": "^1.5.1",
     "imagescript": "^1.2.16",
     "mongoose": "^7.5.3",
+    "nanoid": "^5.0.1",
     "next": "^13.5.3",
+    "openai": "^4.11.0",
     "puppeteer": "^21.3.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "sharp": "^0.32.6",
-    "web3.storage": "^4.5.5"
+    "web3.storage": "^4.5.5",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@types/node": "latest",
