@@ -35,8 +35,6 @@ export async function createComponentGenerationContext(
     icons: [], // for now we are going to ignore icons until we have a better way to handle them using the RAG
   };
 
-  console.log(params.componentDesign.libraries);
-
   // We need to limit the number of examples we use for each library component
   retrievedContext.components = retrievedContext.components.map((e, idx) => {
     const examples_total_tokens = tiktokenEncoder.encode(
