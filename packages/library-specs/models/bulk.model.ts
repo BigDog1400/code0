@@ -5,16 +5,18 @@ const GenericLibrarySpecSchema = new Schema({
   description: String,
   docs_path: String,
   docs: {
-    title: String,
-    description: String,
-    component: Boolean,
-  },
-  examples: [
-    {
-      source: String,
+    import: {
       code: String,
+      source: String,
     },
-  ],
+    use: Schema.Types.Mixed,
+    examples: [
+      {
+        source: String,
+        code: String,
+      },
+    ],
+  }
 });
 
 const GenericLibrarySchema = new Schema({

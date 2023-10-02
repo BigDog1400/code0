@@ -6,9 +6,9 @@ export interface IGenericLibraryExample {
 }
 
 export interface IGenericLibraryDocs {
-  title: string;
-  description: string;
-  component: boolean;
+  import: IGenericLibraryExample;
+  use: IGenericLibraryExample[];
+  examples: IGenericLibraryExample[];
 }
 
 export interface IGenericLibrarySpec {
@@ -16,7 +16,6 @@ export interface IGenericLibrarySpec {
   description: string;
   docs_path: string;
   docs: IGenericLibraryDocs;
-  examples: IGenericLibraryExample[];
 }
 
 export interface IGenericLibraryClone {

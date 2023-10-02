@@ -91,6 +91,7 @@ const mainTask = async () => {
   const updatedSpecs = (
     await Promise.allSettled(
       specs.map(async (e) => {
+        console.log(e.framework, e.library);
         return {
           ...e,
           specs: await e.specs(),

@@ -28,7 +28,7 @@ const extractTsxCodeBlocks = (markdownFile: string) => {
 
 const getSpecsFromDocsAndExamples = async () => {
   const shadcn_example_folders = Deno.readDir(
-    `./clones/shadcn/apps/www/app/examples`
+    `./clones/shadcn/apps/www/registry/default/example`
   );
   const shadcn_docs_files = Deno.readDir(
     `./clones/shadcn/apps/www/content/docs/components`
@@ -38,6 +38,7 @@ const getSpecsFromDocsAndExamples = async () => {
 
   for await (const file of shadcn_docs_files) {
     const slug = file.name.split(".mdx")[0];
+    console.log(slug);
     const meta = {
       title: "",
       description: "",
@@ -75,30 +76,20 @@ const getSpecsFromDocsAndExamples = async () => {
 
     const tsx_blocks_examples = [];
 
-    for await (const folder of shadcn_example_folders) {
-      if (folder.isDirectory) {
-        const currentFolder = Deno.readDir(
-          join(`./clones/shadcn/apps/www/app/examples`, folder.name)
-        );
+    for await (const fileb of shadcn_example_folders) {
+      if (fileb.isFile && fileb.name.startsWith(slug)) {
 
-        for await (const fileb of currentFolder) {
-          if (!fileb.isFile && !fileb.name.startsWith(slug)) continue;
-          const fileContent = decoder.decode(
-            await Deno.readFile(
-              join(
-                `./clones/shadcn/apps/www/app/examples`,
-                folder.name,
-                fileb.name
-              )
-            )
-          );
-          tsx_blocks_examples.push({
-            source: fileb.name,
-            code: fileContent
-              .trim()
-              .replaceAll(`"@/registry/default/ui/`, `"@/components/ui/`),
-          });
-        }
+        const fileContent = decoder.decode(
+          await Deno.readFile(
+            join(`./clones/shadcn/apps/www/registry/default/example`, fileb.name)
+          )
+        );;
+        tsx_blocks_examples.push({
+          source: fileb.name,
+          code: fileContent
+            .trim()
+            .replaceAll(`"@/registry/default/ui/`, `"@/components/ui/`),
+        });
       }
     }
 
@@ -106,11 +97,14 @@ const getSpecsFromDocsAndExamples = async () => {
       name: meta.title,
       description: meta.description,
       docs_path: join(
-        `./clones/shadcn/apps/www/content/docs/components`,
+        `./clones/shadcn/apps/www/copent/docs/components`,
         file.name
       ),
-      docs: { ...meta },
-      examples: tsx_blocks_examples,
+      docs: {
+        import: tsx_blocks_docs[0],
+        use: tsx_blocks_docs.slice(1),
+        examples: tsx_blocks_examples,
+      },
     });
   }
 
@@ -118,9 +112,9 @@ const getSpecsFromDocsAndExamples = async () => {
 };
 export const getDocsSpecs = (): IGenericLibrary => ({
   clone: {
-	path: "shadcn",
-	repo: "https://github.com/shadcn-ui/ui",
-	branch: "main",
+    path: "shadcn",
+    repo: "https://github.com/shadcn-ui/ui",
+    branch: "main",
   },
   framework: "react",
   library: "shadcn-ui",
