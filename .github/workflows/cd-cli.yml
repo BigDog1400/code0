@@ -126,9 +126,22 @@ jobs:
       - name: Create dist directory
         run: mkdir -p ./apps/cli/dist
 
-      - name: Download binaries
+      - name: Download binary macOS
         with:
           path: ./apps/cli/dist
+          name: cli-darwin
+        uses: actions/download-artifact@v3
+
+      - name: Download binary linux
+        with:
+          path: ./apps/cli/dist
+          name: cli-linux
+        uses: actions/download-artifact@v3
+
+      - name: Download binary windows
+        with:
+          path: ./apps/cli/dist
+          name: cli-windows
         uses: actions/download-artifact@v3
 
       - name: List directory
