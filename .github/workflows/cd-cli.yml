@@ -88,11 +88,12 @@ jobs:
           tag: ${{ github.event.release.tag_name }}
           asset_name: cli-windows.zip
           overwrite: true
-      - name: Publish to NPM
-      - uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org/
-      - run: cd apps/cli && npm publish
+      - name: Publish to pm
+        run: cd apps/cli && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
