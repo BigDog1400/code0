@@ -127,7 +127,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Move binaries
-        run: mv cli-* ./apps/cli/dist
+        run: mkdir -p ./apps/cli/dist && mv cli-* ./apps/cli/dist
 
       - name: List directory
         working-directory: ./apps/cli
