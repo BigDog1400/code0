@@ -1,6 +1,6 @@
 {
   "name": "code0",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Code0 CLI",
   "main": "index.js",
   "scripts": {
