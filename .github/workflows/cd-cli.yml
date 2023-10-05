@@ -32,18 +32,7 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: apps/cli/dist/cli-darwin
-          dest: cli.zip
-
-      - name: Release MacOS binary Zip
-        if: runner.os == 'MacOS'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_name: BigDog1400/code0
-          repo_token: ${{ secrets.TOKEN }}
-          file: cli.zip
-          tag: ${{ github.event.release.tag_name }}
-          asset_name: cli-macos.zip
-          overwrite: true
+          dest: cli-macos.zip
 
       - name: Rename Linux binary
         if: runner.os == 'Linux'
@@ -54,18 +43,7 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: apps/cli/dist/cli-linux
-          dest: cli.zip
-
-      - name: Release Linux binary Zip
-        if: runner.os == 'Linux'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_name: BigDog1400/code0
-          repo_token: ${{ secrets.TOKEN }}
-          file: cli.zip
-          tag: ${{ github.event.release.tag_name }}
-          asset_name: cli-linux.zip
-          overwrite: true
+          dest: cli-linux.zip
 
       - name: Rename Windows binary
         if: runner.os == 'Windows'
@@ -76,24 +54,29 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: apps/cli/dist/cli-windows.exe
-          dest: cli.zip
+          dest: cli-windows.zip
 
-      - name: Release Windows binary Zip
-        if: runner.os == 'Windows'
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_name: BigDog1400/code0
-          repo_token: ${{ secrets.TOKEN }}
-          file: cli.zip
-          tag: ${{ github.event.release.tag_name }}
-          asset_name: cli-windows.zip
-          overwrite: true
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org/
+
       - name: Publish to pm
-        run: cd apps/cli && npm publish
+        run: |
+          cd apps/cli
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Release binaries
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: BigDog1400/code0
+          repo_token: ${{ secrets.TOKEN }}
+          files: |
+            cli-macos.zip
+            cli-linux.zip
+            cli-windows.zip
+          tag: ${{ github.event.release.tag_name }}
+          overwrite: true
