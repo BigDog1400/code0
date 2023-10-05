@@ -123,11 +123,13 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
 
-      - name: Download binaries
-        uses: actions/download-artifact@v3
+      - name: Create dist directory
+        run: mkdir -p ./apps/cli/dist
 
-      - name: Move binaries
-        run: mkdir -p ./apps/cli/dist && mv cli-* ./apps/cli/dist
+      - name: Download binaries
+        with:
+          path: ./apps/cli/dist
+        uses: actions/download-artifact@v3
 
       - name: List directory
         working-directory: ./apps/cli
