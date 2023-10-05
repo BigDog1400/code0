@@ -32,7 +32,18 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: apps/cli/dist/cli-darwin
-          dest: cli-macos.zip
+          dest: cli.zip
+
+      - name: Release MacOS binary Zip
+        if: runner.os == 'MacOS'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: BigDog1400/code0
+          repo_token: ${{ secrets.TOKEN }}
+          file: cli.zip
+          tag: ${{ github.event.release.tag_name }}
+          asset_name: cli-macos.zip
+          overwrite: true
 
       - name: Rename Linux binary
         if: runner.os == 'Linux'
@@ -43,7 +54,18 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: apps/cli/dist/cli-linux
-          dest: cli-linux.zip
+          dest: cli.zip
+
+      - name: Release Linux binary Zip
+        if: runner.os == 'Linux'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: BigDog1400/code0
+          repo_token: ${{ secrets.TOKEN }}
+          file: cli.zip
+          tag: ${{ github.event.release.tag_name }}
+          asset_name: cli-linux.zip
+          overwrite: true
 
       - name: Rename Windows binary
         if: runner.os == 'Windows'
@@ -54,31 +76,31 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: apps/cli/dist/cli-windows.exe
-          dest: cli-windows.zip
+          dest: cli.zip
 
-  release:
-    name: Release binaries
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Release binaries
+      - name: Release Windows binary Zip
+        if: runner.os == 'Windows'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_name: BigDog1400/code0
           repo_token: ${{ secrets.TOKEN }}
-          files: |
-            cli-macos.zip
-            cli-linux.zip
-            cli-windows.zip
+          file: cli.zip
           tag: ${{ github.event.release.tag_name }}
+          asset_name: cli-windows.zip
           overwrite: true
+
+  release:
+    name: Release to npm registry
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org/
 
-      - name: Publish to pm
+      - name: Publish to npm
         run: |
           cd apps/cli
           npm publish
