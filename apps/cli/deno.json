@@ -1,6 +1,10 @@
 {
     "tasks": {
         "build": "deno compile -A --unstable --output dist/cli mod.ts",
-        "build:windows": "deno compile -A --unstable --output dist/cli-windows.exe mod.ts"
+        "build:windows": "deno compile -A --unstable --target x86_64-pc-windows-msvc -o dist/cli-windows.exe mod.ts",
+        "build:darwin": "deno compile -A --unstable --target x86_64-apple-darwin -o dist/cli-darwin ./mod.ts",
+        "build:darwin-arm64": "deno compile -A --unstable --target aarch64-apple-darwin -o dist/cli-darwin-arm64 ./mod.ts",
+        "build:linux": "deno compile -A --unstable --target x86_64-unknown-linux-gnu -o dist/cli-linux ./mod.ts",
+        "build:all": "deno task build:windows & deno task build:darwin & deno task build:darwin-arm64 & deno task build:linux"
     }
 }
