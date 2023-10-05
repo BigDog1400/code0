@@ -1,0 +1,13 @@
+{
+  "name": "code0",
+  "version": "1.0.2",
+  "description": "Code0 CLI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "bin/npx.mod.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

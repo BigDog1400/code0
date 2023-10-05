@@ -1,15 +1,16 @@
 
-export const setOpenv0ServerCommand = (options: { force?: boolean } , args: [string, (string | undefined)?]) => {
+export const setCode0ServerCommand = async (options: { force?: boolean } , args: [string, (string | undefined)?]) => {
+    const kv = await Deno.openKv();
     const server = args[0];
     if (!server) {
         console.log("Please provide a server");
         return;
     }
-    const currentServer = localStorage.getItem("openv0_server");
-    if (currentServer && !options.force) {  
-        console.log(`A server is already set to ${currentServer} use --force to override`);
+    const currentServer = await kv.get<string>(["Code0_server"]);
+    if (currentServer.value && !options.force) {  
+        console.log(`A server is already set to ${currentServer.value} use --force to override`);
         return; 
     }
-    localStorage.setItem("openv0_server", server);
+    await kv.set(["Code0_server"], server);
     console.log(`Server set to ${server}`);
 }

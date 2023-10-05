@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "module": "CommonJS",
+      "moduleResolution": "Node",
+      "outDir": "./dist",
+    },
+    "files": ["./npx.mod.ts"]
+  }

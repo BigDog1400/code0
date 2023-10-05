@@ -17,9 +17,10 @@ interface IComponentResponse extends IComponent {
 }
 
 export const getComponentCommand = async ([id, version]: [string, string?]) => {
-  const currentServer = localStorage.getItem("openv0_server");
+  const kv = await Deno.openKv();
+  const currentServer = (await kv.get<string>(["Code0_server"])).value;
   if (!currentServer) {
-    console.log("Please provide a server using openv0 set [server]");
+    console.log("Please provide a server using Code0 set [server]");
     return;
   }
   const url = `${currentServer}/api/components/${id}`;

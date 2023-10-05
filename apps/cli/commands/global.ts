@@ -28,21 +28,21 @@ const unzip = async (bufferAsset: Uint8Array) => {
 export const downloadCommand = async (dest? : string) => {
   console.log("Downloading...");
   const url =
-    "https://github.com/raidendotai/openv0/archive/refs/heads/main.zip";
+    "https://github.com/BigDog1400/code0/archive/refs/heads/main.zip";
   const { data } = await axios.get(url, {
     responseType: "arraybuffer",
   });
-  const path = join(Deno.cwd(), "openv0.zip");
+  const path = join(Deno.cwd(), "code0.zip");
   await Deno.writeFile(path, data);
   console.log("Extracting...");
   const zip = await Deno.readFile(path);
   await unzip(zip);
   await Deno.remove(path);
   if (dest) {
-    await Deno.rename("openv0-main", dest);
+    await Deno.rename("code0-main", dest);
   }
   console.log(green("Done!"));
   console.log(yellow(`Make sure to install dependencies!`)); 
-  console.log(green(`cd ${dest || "openv0-main"}/openv0_server && node index.js`));
-  console.log(green(`cd ${dest || "openv0-main"}/openv0_vitereact && pnpm run dev`));
+  console.log(green(`cd ${dest || "code0-main"}/Code0_server && node index.js`));
+  console.log(green(`cd ${dest || "code0-main"}/Code0_vitereact && pnpm run dev`));
 };

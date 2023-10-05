@@ -3,9 +3,11 @@ import {
   HelpCommand,
   CompletionsCommand,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
-import meta from "./meta.ts";
+import meta from "./package.json" assert {
+  type: "json",
+};
 import { downloadCommand } from "./commands/global.ts";
-import { setOpenv0ServerCommand } from "./commands/setServer.ts";
+import { setCode0ServerCommand } from "./commands/setServer.ts";
 import { getComponentCommand } from "./commands/getComponent.ts";
 
 await new Command()
@@ -19,14 +21,14 @@ await new Command()
     "setup",
     new Command()
       .name("setup")
-      .description("Set openv0 server")
+      .description("Set Code0 server")
       .alias("set")
       .alias("s")
-      .usage("<server> OpenV0 server")
+      .usage("<server> Code0 server")
       .option("-f, --force", "Override existing server")
       .arguments("<server> [output:string]")
       .action((options, ...args) => {
-        setOpenv0ServerCommand(options, args);
+        setCode0ServerCommand(options, args);
       })
   )
   .command(
@@ -34,7 +36,7 @@ await new Command()
     new Command()
       .name("install")
       .alias("i")
-      .description("Install openv0 server")
+      .description("Install Code0 server")
       .arguments("[destination] [output:string]")
       .action(async (_, args) => {
         await downloadCommand(args);
@@ -46,7 +48,7 @@ await new Command()
       .name("add")
       .description("Add a component to the components (or destination) folder")
 .usage("(<id>, [version]) \nIf no version is provided, the latest version will be used")
-      .example("Add a component","openv0 add my-component")
+      .example("Add a component","Code0 add my-component")
       .arguments(
         "<component_id...>"
       )
