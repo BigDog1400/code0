@@ -69,6 +69,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
+  release:
+    name: Release binaries
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Release binaries
         uses: svenstaro/upload-release-action@v2
         with:
