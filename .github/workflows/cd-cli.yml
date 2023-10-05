@@ -27,6 +27,13 @@ jobs:
         if: runner.os == 'MacOS'
         run: mv apps/cli/dist/cli apps/cli/dist/cli-darwin
 
+      - name: Upload MacOS Binary
+        if: runner.os == 'MacOS'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cli-darwin
+          path: apps/cli/dist/cli-darwin
+
       - name: Zip MacOS binary
         if: runner.os == 'MacOS'
         uses: vimtor/action-zip@v1
@@ -49,6 +56,13 @@ jobs:
         if: runner.os == 'Linux'
         run: mv apps/cli/dist/cli apps/cli/dist/cli-linux
 
+      - name: Upload Linux Binary
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cli-linux
+          path: apps/cli/dist/cli-linux
+
       - name: Zip Linux binary
         if: runner.os == 'Linux'
         uses: vimtor/action-zip@v1
@@ -70,6 +84,13 @@ jobs:
       - name: Rename Windows binary
         if: runner.os == 'Windows'
         run: mv apps/cli/dist/cli.exe apps/cli/dist/cli-windows.exe
+
+      - name: Upload Windows Binary
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v3
+        with:
+          name: cli-windows
+          path: apps/cli/dist/cli-windows.exe
 
       - name: Zip Windows binary
         if: runner.os == 'Windows'
@@ -101,6 +122,9 @@ jobs:
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org/
+
+      - name: Download binaries
+        uses: actions/download-artifact@v3
 
       - name: List directory
         working-directory: ./apps/cli
