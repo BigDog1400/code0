@@ -1,5 +1,6 @@
 {
     "tasks": {
-        "build": "deno compile -A --unstable --output dist/cli mod.ts"
+        "build": "deno compile -A --unstable --output dist/cli mod.ts",
+        "build:windows": "deno compile -A --unstable --output dist/cli-windows.exe mod.ts"
     }
 }
