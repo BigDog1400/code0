@@ -56,19 +56,6 @@ jobs:
           files: apps/cli/dist/cli-windows.exe
           dest: cli-windows.zip
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: https://registry.npmjs.org/
-
-      - name: Publish to pm
-        run: |
-          cd apps/cli
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-
   release:
     name: Release binaries
     needs: build
@@ -85,3 +72,15 @@ jobs:
             cli-windows.zip
           tag: ${{ github.event.release.tag_name }}
           overwrite: true
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
+
+      - name: Publish to pm
+        run: |
+          cd apps/cli
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
