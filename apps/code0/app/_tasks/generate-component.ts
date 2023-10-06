@@ -14,7 +14,9 @@ interface ComponentGenerationContextParams {
   framework: string;
 }
 
-const getFiirstContextEntry = (framework: string): ChatCompletionMessageParam => ({
+const getFiirstContextEntry = (
+  framework: string,
+): ChatCompletionMessageParam => ({
   role: `system`,
   content:
     `You are an expert at writing ${framework} components.\n` +
@@ -28,6 +30,7 @@ const getFiirstContextEntry = (framework: string): ChatCompletionMessageParam =>
 export async function generateComponent(
   params: ComponentGenerationContextParams,
 ) {
+  console.log('Generating component...');
   await clientPromise;
   const context: ChatCompletionMessageParam[] = [
     getFiirstContextEntry(params.framework),
@@ -72,7 +75,6 @@ export async function generateComponent(
     }`,
   );
 
-  debugger;
   const response = await openai.chat.completions.create({
     ...prompt,
     stream: false,
@@ -115,7 +117,6 @@ export async function generateComponent(
   });
 
   await generatedComponent.save();
-  debugger;
 
   return {
     code: cleanCode,

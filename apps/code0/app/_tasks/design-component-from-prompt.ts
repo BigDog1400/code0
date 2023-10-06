@@ -10,7 +10,7 @@ interface DesignComponentFromPromptParams {
   description: string;
   generationId: string;
   framework: string;
-  libraries: string[]
+  libraries: string[];
 }
 
 const getComponentSchema = async (framework: string, libraries: string[]) => ({
@@ -21,8 +21,7 @@ const getComponentSchema = async (framework: string, libraries: string[]) => ({
     },
     description: {
       type: 'string',
-      description:
-        `Write a description for the ${framework} component design task based on the user query. Stick strictly to what the user wants in their request - do not go off track`,
+      description: `Write a description for the ${framework} component design task based on the user query. Stick strictly to what the user wants in their request - do not go off track`,
     },
     // icons: {
     //   type: 'object',
@@ -63,12 +62,16 @@ const getComponentSchema = async (framework: string, libraries: string[]) => ({
         properties: {
           name: {
             type: 'string',
-            enum: (await GenericLibraryModel.find({
-              framework: framework,
-              library: {
-                $in: libraries,
-              }
-            })).flatMap((e) => e.specs).map((e) => e.name),
+            enum: (
+              await GenericLibraryModel.find({
+                framework: framework,
+                library: {
+                  $in: libraries,
+                },
+              })
+            )
+              .flatMap((e) => e.specs)
+              .map((e) => e.name),
           },
           reason: {
             type: 'string',
@@ -80,7 +83,10 @@ const getComponentSchema = async (framework: string, libraries: string[]) => ({
   },
   required: ['name', 'description'],
 });
-const getContext = async (framework: string, libraries: string[]): Promise<ChatCompletionMessageParam[]> => ([
+const getContext = async (
+  framework: string,
+  libraries: string[],
+): Promise<ChatCompletionMessageParam[]> => [
   {
     role: 'system',
     content:
@@ -92,26 +98,30 @@ const getContext = async (framework: string, libraries: string[]): Promise<ChatC
     role: `user`,
     content:
       'Multiple library components can be used while creating a new component in order to help you do a better design job, faster.\n\nAVAILABLE LIBRARY COMPONENTS:\n```\n' +
-      (await GenericLibraryModel.find({
-        framework: framework,
-        library: {
-          $in: libraries,
-        }
-      })).flatMap((e) =>
-        {return e.specs})
+      (
+        await GenericLibraryModel.find({
+          framework: framework,
+          library: {
+            $in: libraries,
+          },
+        })
+      )
+        .flatMap((e) => {
+          return e.specs;
+        })
         .map((e) => {
           return `${e.name} : ${e.description.slice(0, -1)};`;
         })
         .join('\n') +
       '\n```',
   },
-]);
+];
 
 export async function designComponentFromPrompt({
   description,
   generationId,
   libraries,
-  framework
+  framework,
 }: DesignComponentFromPromptParams) {
   await clientPromise;
 
@@ -188,9 +198,6 @@ export async function designComponentFromPrompt({
       })) || [],
   };
 
-  console.log(componentDesignResult)
-
-  debugger;
   const componentDesignInstance = new ComponentDesignModel({
     ...componentDesignResult,
     generation_id: generationId,

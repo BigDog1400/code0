@@ -37,8 +37,9 @@ export async function createComponentGenerationContext(
 
   // We need to limit the number of examples we use for each library component
   retrievedContext.components = retrievedContext.components.map((e, idx) => {
+    const docs = e?.docs;
     const examples_total_tokens = tiktokenEncoder.encode(
-      e.docs.examples
+      docs.examples
         .map(
           (example) => example.source + '```\n' + example.code.trim() + '\n```',
         )
@@ -55,11 +56,10 @@ export async function createComponentGenerationContext(
       examples_total_tokens >
       parseInt(process.env.CONTEXT_TOKENS_PER_LIBRARY_COMPONENT_LIMIT!)
     ) {
-      let updated_library_component = { ...e };
-      updated_library_component.docs.examples = [
-        e.docs.examples[Math.floor(Math.random() * e.docs.examples.length)],
+      e.docs.examples = [
+        docs.examples[Math.floor(Math.random() * docs.examples.length)],
       ];
-      return updated_library_component;
+      return e;
     }
     return e;
   });

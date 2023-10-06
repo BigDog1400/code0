@@ -38,8 +38,8 @@ export function PromptInputForm() {
             type="text"
             name="prompt"
           />
-          <input type="text" name="template" hidden value="Vue + Chakra" />
-          <input type="text" name="framework" hidden value="vue" />
+          <input type="hidden" name="template" value="Shadcn + Lucide" />
+          <input type="hidden" name="framework" value="react" />
           <SubmitButton />
         </div>
       </div>

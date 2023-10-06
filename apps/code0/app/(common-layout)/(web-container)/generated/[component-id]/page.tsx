@@ -1,20 +1,23 @@
-"use client"; // provitional
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "next/navigation";
+'use client'; // provitional
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'next/navigation';
 
 // `app/dashboard/page.tsx` is the UI for the `/dashboard` URL
 export default function Page() {
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState('');
   const [isImagePreviewLoading, setIsImagePreviewLoading] = useState(false);
-  const { ["component-id"]: componentId, componentVersion } = useParams();
+  const { ['component-id']: componentId, componentVersion } = useParams();
 
   const getImagePreview = async () => {
     setIsImagePreviewLoading(true);
+    if (!componentId || !componentVersion) {
+      return;
+    }
     try {
       const { data } = await axios.get<{ url: string }>(
-        `/api/preview/${componentId}?componentVersion=${componentVersion}`
+        `/api/preview/${componentId}?componentVersion=${componentVersion}`,
       );
       setImagePreview(data.url);
     } catch (error) {
@@ -36,7 +39,7 @@ export default function Page() {
       <div>{imagePreview && <img src={imagePreview} />}</div>
       <div>
         <button onClick={() => getImagePreview()}>
-          {isImagePreviewLoading ? "Loading..." : "Get Image Preview"}
+          {isImagePreviewLoading ? 'Loading...' : 'Get Image Preview'}
         </button>
       </div>
     </>
