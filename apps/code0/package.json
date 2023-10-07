@@ -15,6 +15,7 @@
     "@webcontainer/api": "^1.1.5",
     "axios": "^1.5.1",
     "imagescript": "^1.2.16",
+    "jotai": "^2.4.3",
     "mongoose": "^7.5.3",
     "nanoid": "^5.0.1",
     "next": "^13.5.3",

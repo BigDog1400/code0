@@ -1,7 +1,7 @@
 export interface IComponent {
   name: string;
   code: string;
-  componentId: string;
+  generationId: string;
   slug: string;
   prompt: string;
   timestamp: string;

@@ -8,10 +8,10 @@ import {
 } from "./types.ts";
 import { connect } from "npm:mongoose";
 import { GenericLibraryModel } from "./models/bulk.model.ts";
-import { ensureDir } from "https://deno.land/std@0.202.0/fs/ensure_dir.ts";
 import { join, dirname } from "https://deno.land/std@0.202.0/path/mod.ts";
 import * as zip from "https://deno.land/x/zipjs@v2.7.29/index.js";
 import axios from "npm:axios";
+import { ensureDir } from "https://deno.land/std@0.202.0/fs/ensure_dir.ts";
 
 const MONGO_URI = Deno.env.get("MONGO_URI") || "";
 

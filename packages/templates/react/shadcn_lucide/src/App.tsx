@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from "react";
-import meta from "@/components/generated/import.meta";
-import "./App.css";
+import { FC, useEffect, useState } from 'react';
+import meta from '@/components/generated/import.meta';
+import './App.css';
 
 function App() {
   const [componentImport, setComponentImport] = useState<{
@@ -11,7 +11,7 @@ function App() {
       try {
         const component = (
           await import(
-            `@/components/generated/${meta.componentId}_${meta.version}.${meta.extension}`
+            `@/components/generated/${meta.generationId}_${meta.version}.${meta.extension}`
           )
         ).default as FC;
 
@@ -28,12 +28,17 @@ function App() {
       return <Component />;
     } catch (error) {
       // Handle the error gracefully, e.g., log it or show an error message
-      console.error("Error rendering component:", error);
+      console.error('Error rendering component:', error);
       return <div>Error rendering component</div>; // You can customize the error message here
     }
   }
 
-  return <>{componentImport.component && renderComponentSafely(componentImport.component)}</>;
+  return (
+    <>
+      {componentImport.component &&
+        renderComponentSafely(componentImport.component)}
+    </>
+  );
 }
 
 export default App;

@@ -1,19 +1,19 @@
-import clientPromise from "@/lib/database";
-import { GeneratedComponentModel } from "@/app/_models/component";
-import { NextRequest } from "next/server";
+import clientPromise from '@/lib/database';
+import { GeneratedComponentModel } from '@/app/_models/component';
+import { NextRequest } from 'next/server';
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { ["component-id"]: string } }
+  { params }: { params: { ['component-id']: string } },
 ) => {
   await clientPromise;
-  const componentId = params["component-id"];
+  const componentId = params['component-id'];
   const components = await GeneratedComponentModel.find({
-    componentId,
+    generationId: componentId,
   });
 
   if (components.length === 0) {
-    return new Response(JSON.stringify({ message: "Component not found" }), {
+    return new Response(JSON.stringify({ message: 'Component not found' }), {
       status: 404,
     });
   }
@@ -25,10 +25,10 @@ export const GET = async (
         iterations: components.sort(),
       },
       null,
-      2
+      2,
     ),
     {
       status: 200,
-    }
+    },
   );
 };

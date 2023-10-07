@@ -57,7 +57,7 @@
       },
       "App.tsx": {
         "file": {
-          "contents": "import { FC, useEffect, useState } from \"react\";\nimport meta from \"@/components/generated/import.meta\";\nimport \"./App.css\";\n\nfunction App() {\n  const [componentImport, setComponentImport] = useState<{\n    component: FC | null;\n  }>({ component: null });\n  useEffect(() => {\n    async function getComponent() {\n      try {\n        const component = (\n          await import(\n            `@/components/generated/${meta.componentId}_${meta.version}.${meta.extension}`\n          )\n        ).default as FC;\n\n        setComponentImport({ component });\n      } catch (error) {\n        console.log(error);\n      }\n    }\n    getComponent();\n  }, []);\n\n  function renderComponentSafely(Component: FC) {\n    try {\n      return <Component />;\n    } catch (error) {\n      // Handle the error gracefully, e.g., log it or show an error message\n      console.error(\"Error rendering component:\", error);\n      return <div>Error rendering component</div>; // You can customize the error message here\n    }\n  }\n\n  return <>{componentImport.component && renderComponentSafely(componentImport.component)}</>;\n}\n\nexport default App;\n"
+          "contents": "import { FC, useEffect, useState } from \"react\";\nimport meta from \"@/components/generated/import.meta\";\nimport \"./App.css\";\n\nfunction App() {\n  const [componentImport, setComponentImport] = useState<{\n    component: FC | null;\n  }>({ component: null });\n  useEffect(() => {\n    async function getComponent() {\n      try {\n        const component = (\n          await import(\n            `@/components/generated/${meta.generationId}_${meta.version}.${meta.extension}`\n          )\n        ).default as FC;\n\n        setComponentImport({ component });\n      } catch (error) {\n        console.log(error);\n      }\n    }\n    getComponent();\n  }, []);\n\n  function renderComponentSafely(Component: FC) {\n    try {\n      return <Component />;\n    } catch (error) {\n      // Handle the error gracefully, e.g., log it or show an error message\n      console.error(\"Error rendering component:\", error);\n      return <div>Error rendering component</div>; // You can customize the error message here\n    }\n  }\n\n  return <>{componentImport.component && renderComponentSafely(componentImport.component)}</>;\n}\n\nexport default App;\n"
         }
       },
       "assets": {
@@ -75,7 +75,7 @@
             "directory": {
               "import.meta.ts": {
                 "file": {
-                  "contents": "export interface IComponent {\r\n  name: string;\r\n  code: string;\r\n  componentId: string;\r\n  slug: string;\r\n  prompt: string;\r\n  timestamp: string;\r\n  version: string;\r\n  extension: string;\r\n}\r\n\r\nexport default {} as IComponent;\r\n"
+                  "contents": "export interface IComponent {\r\n  name: string;\r\n  code: string;\r\n  generationId: string;\r\n  slug: string;\r\n  prompt: string;\r\n  timestamp: string;\r\n  version: string;\r\n  extension: string;\r\n}\r\n\r\nexport default {} as IComponent;\r\n"
                 }
               }
             }
