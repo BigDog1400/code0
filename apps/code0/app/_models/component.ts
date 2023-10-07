@@ -8,6 +8,8 @@ export interface GeneratedComponent {
   timestamp?: Date;
   version: string;
   code: string;
+  framework: string;
+  libraries: string[];
 }
 
 export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
@@ -38,6 +40,14 @@ export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
     },
     code: {
       type: String,
+      required: true,
+    },
+    framework: {
+      type: String,
+      required: true,
+    },
+    libraries: {
+      type: [String],
       required: true,
     },
   },

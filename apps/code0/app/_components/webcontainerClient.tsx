@@ -5,6 +5,11 @@ import templates from '../_templates';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useWebContainer } from '../(common-layout)/(web-container)/_atoms/web-container';
+import {
+  messages,
+  useLoadingMessagesAtom,
+} from '../(common-layout)/(web-container)/_atoms/loading-messages-atom';
+import Loading from './loading-component';
 
 // /** @type {import('@webcontainer/api').WebContainer}  */
 let webcontainerInstance: WebContainer;
@@ -38,6 +43,7 @@ async function startDevServer() {
 
 export function WebContainerClient() {
   const [webContainerInstance, setWebContainerInstance] = useWebContainer();
+  const [, setMessage] = useLoadingMessagesAtom();
   const { ['component-id']: componentId } = useParams();
   const [webContainerStatus, setWebContainerStatus] = useState<
     'loading' | 'booted' | 'error' | 'idle'
@@ -76,23 +82,27 @@ export function WebContainerClient() {
   const bootWebContainer = useCallback(
     async (componentId: string) => {
       setWebContainerStatus('loading');
+      setMessage(messages[0]);
       webcontainerInstance = await WebContainer.boot();
       setWebContainerInstance(webcontainerInstance);
       window.webContainer = webcontainerInstance;
       setWebContainerStatus('booted');
 
+      setMessage(messages[1]);
       await webcontainerInstance.mount(templates.react[0].template);
 
+      setMessage(messages[2]);
       const exitCode = await installDependencies();
       if (exitCode !== 0) {
         throw new Error('Installation failed');
       }
 
+      setMessage(messages[3]);
       await startDevServer();
 
       getComponentCodeFiles();
     },
-    [getComponentCodeFiles, setWebContainerInstance],
+    [getComponentCodeFiles, setWebContainerInstance, setMessage],
   );
 
   useEffect(() => {
@@ -115,8 +125,9 @@ export function WebContainerClient() {
   ]);
 
   return (
-    <div className="preview">
-      <iframe src="/loading"></iframe>
+    <div className="preview w-full min-h-full flex flex-col relative">
+      <Loading />
+      <iframe className="w-full h-full flex-1" src="/loading"></iframe>
     </div>
   );
 }

@@ -12,9 +12,10 @@ interface ComponentGenerationContextParams {
   context: ChatCompletionMessageParam[];
   generationId: string;
   framework: string;
+  libraries: string[];
 }
 
-const getFiirstContextEntry = (
+const getFirstContextEntry = (
   framework: string,
 ): ChatCompletionMessageParam => ({
   role: `system`,
@@ -33,7 +34,7 @@ export async function generateComponent(
   console.log('Generating component...');
   await clientPromise;
   const context: ChatCompletionMessageParam[] = [
-    getFiirstContextEntry(params.framework),
+    getFirstContextEntry(params.framework),
     ...params.context,
     {
       role: `user`,
@@ -107,12 +108,15 @@ export async function generateComponent(
   console.log(`Generated code : \n${cleanCode}`);
 
   cleanCode = cleanCode.trim();
+  console.log('To save: ', params.libraries);
   const generatedComponent = new GeneratedComponentModel({
     generationId: params.generationId,
     code: cleanCode,
     name: params.componentDesign.name,
     prompt: params.componentDesign.description.by_user,
     slug: params.componentDesign.name,
+    framework: params.framework,
+    libraries: params.libraries,
     version: '0.0.1',
   });
 

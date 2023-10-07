@@ -59,6 +59,7 @@ export async function processPrompt(prevState: any, formData: FormData) {
       context: componentTaskContext,
       componentDesign: designComponent,
       framework: frameworkMap[data.framework as AllowedFramework],
+      libraries,
       generationId,
     });
 

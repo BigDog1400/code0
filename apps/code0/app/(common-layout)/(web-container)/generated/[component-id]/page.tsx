@@ -29,21 +29,21 @@ export default function Page() {
 
   return (
     <>
-      <main
+      {/* <main
         id="generated"
         className="flex flex-col items-center justify-between p-24"
-      >
-        <h1>Hello, Dashboard Page!</h1>
+      > */}
+      {/* <h1>Hello, Dashboard Page!</h1>
         <Link href="/">Go to Form</Link>
         <Link href="/generated/vyZCDDT27nC9kLhdRNKCZ">Go to Component A</Link>
-        <Link href="/generated/97hNKK7seFTLOjKKoFt8F">Go to Component B</Link>
-      </main>
-      <div>{imagePreview && <img src={imagePreview} />}</div>
+        <Link href="/generated/97hNKK7seFTLOjKKoFt8F">Go to Component B</Link> */}
+      {/* </main> */}
+      {/* <div>{imagePreview && <img src={imagePreview} />}</div>
       <div>
         <button onClick={() => getImagePreview()}>
           {isImagePreviewLoading ? 'Loading...' : 'Get Image Preview'}
         </button>
-      </div>
+      </div> */}
     </>
   );
 }
