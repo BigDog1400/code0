@@ -113,6 +113,7 @@ export default function Page() {
               action={() => {
                 handleItemClick(component);
               }}
+              version={component.id}
               prompt={component.prompt}
             />
           ))}

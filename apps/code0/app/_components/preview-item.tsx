@@ -4,11 +4,13 @@ export default function ComponentPreview({
   image,
   action,
   prompt,
+  version,
 }: {
   image: string;
   prompt: string;
   action: () => void;
   isSelected?: boolean;
+  version?: string;
 }) {
   return (
     <div
@@ -33,6 +35,9 @@ export default function ComponentPreview({
         <div className="bg-gradient-to-r p-4 from-slate-50 my-auto to-slate-200 rounded-xl shadow-md">
           <p className="text-sm text-gray-800 min-w-[200px]">{prompt}</p>
         </div>
+      </div>
+      <div className='absolute bottom-2 left-2 bg-gray-50 rounded-lg px-2'>
+        <p className="text-xs text-gray-500 font-bold font-mono">v{version}</p>
       </div>
     </div>
   );
