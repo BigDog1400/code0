@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 export interface IComponent {
   name: string;
   code: string;
@@ -12,4 +14,8 @@ export interface IComponent {
   libraries: string[];
 }
 
-export default {} as IComponent;
+// export default {} as IComponent;
+export default {} as Array<{
+  name: FC;
+  version: string;
+}>;

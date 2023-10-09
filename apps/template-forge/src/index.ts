@@ -53,14 +53,21 @@ export const addComponentTemplate = async (componentId: string) => {
 
     const metaFile = join(componentsFolder, 'import.meta.ts');
 
-    await fs.writeFile(
-      metaFile,
-      `export default ${JSON.stringify(componentMeta)}`,
-    );
-
     // write files
 
+    const chunkNames: Array<{
+      name: string;
+      import: string;
+      version: string;
+    }> = [];
     for (const component of components) {
+      const componentExtension =
+        FRAMEWORKS_EXTENSION_MAP[
+          (
+            component.framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
+          ).toLowerCase()
+        ];
+      console.log({ componentExtension });
       const componentFolder = join(
         componentsFolder,
         `${component.generationId}_${component.version}.${
@@ -71,8 +78,44 @@ export const addComponentTemplate = async (componentId: string) => {
           ]
         }`,
       );
+
+      chunkNames.push({
+        name: `${component.name}_${component.version}`,
+        import: `./${component.generationId}_${component.version}.${componentExtension}`,
+        version: component.version,
+      });
+
+      console.log(componentFolder);
+
       await fs.writeFile(componentFolder, component.code);
     }
+
+    let names = JSON.stringify(
+      chunkNames.map((chunk) => {
+        return {
+          name: chunk.name,
+          version: chunk.version,
+        };
+      }),
+    );
+
+    let literal = ``;
+    let importsString = '';
+    for (const chunkName of chunkNames) {
+      const importStatement = `import ${chunkName.name} from '${chunkName.import}';\n`;
+      importsString += importStatement;
+
+      literal += `{
+        name: ${chunkName.name},
+        version: "${chunkName.version}",
+      },\n`;
+    }
+
+    importsString += `export default [${literal}];`;
+
+    console.log({ importsString });
+
+    await fs.writeFile(metaFile, importsString);
 
     // Install dependencies
 
@@ -96,11 +139,11 @@ export const addComponentTemplate = async (componentId: string) => {
       await import(join('file://', tempFolder, 'code0.config.js'))
     ).default;
 
-    const configFile = config(join(tempFolder, 'src'));
+    // const configFile = config(join(tempFolder, 'src'));
     // Build template
 
     await build({
-      ...configFile,
+      ...config,
       root: tempFolder,
     });
 
@@ -110,11 +153,6 @@ export const addComponentTemplate = async (componentId: string) => {
 
     let files = (await getFilesFromPath(distFolder)) as File[];
     console.log({ files });
-
-    // for (let file of files) {
-    //   // @ts-ignore
-    //   file?.name = file.name.replace('/dist', '');
-    // }
 
     files = files.map((file) => {
       // @ts-ignore
@@ -143,4 +181,7 @@ app.get('/api/forge/:generationId', async (c) => {
   return c.json({ cid });
 });
 
-serve(app);
+serve({
+  fetch: app.fetch,
+  port: 8787,
+});
