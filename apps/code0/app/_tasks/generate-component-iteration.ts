@@ -12,6 +12,7 @@ const FRAMEWORKS_EXTENSION_MAP = {
   react: `tsx`,
   next: `tsx`,
   svelte: `svelte`,
+  vue: `vue`,
 };
 
 interface ComponentGenerationContextParams {
@@ -33,7 +34,7 @@ const getFirstContextEntry = (
     `You will write the full ${framework} component code, which should include all imports.` +
     `Your generated code will be directly written to a .${
       FRAMEWORKS_EXTENSION_MAP[
-        framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
+        framework.toLowerCase() as keyof typeof FRAMEWORKS_EXTENSION_MAP
       ] || 'tsx'
     } ${framework} component file and used in production.`,
 });
@@ -57,8 +58,7 @@ export async function generateComponentIteration(
         `- CURRENT COMPONENT CODE :\n\n` +
         '```' +
         FRAMEWORKS_EXTENSION_MAP[
-          params.lastGeneratedComponent
-            .framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
+          params.lastGeneratedComponent.framework.toLowerCase() as keyof typeof FRAMEWORKS_EXTENSION_MAP
         ] +
         '\n' +
         params.lastGeneratedComponent.code +
@@ -76,15 +76,13 @@ export async function generateComponentIteration(
         params.lastGeneratedComponent.framework +
         ' component that you write will be written directly to a .' +
         FRAMEWORKS_EXTENSION_MAP[
-          params.lastGeneratedComponent
-            .framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
+          params.lastGeneratedComponent.framework.toLowerCase() as keyof typeof FRAMEWORKS_EXTENSION_MAP
         ] +
         ' file inside the ' +
         params.lastGeneratedComponent.framework +
         ' project. Make sure all necessary imports are done, and that your full code is enclosed with ```' +
         FRAMEWORKS_EXTENSION_MAP[
-          params.lastGeneratedComponent
-            .framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
+          params.lastGeneratedComponent.framework.toLowerCase() as keyof typeof FRAMEWORKS_EXTENSION_MAP
         ] +
         ' blocks.\n' +
         'Answer with generated code only. DO NOT ADD ANY EXTRA TEXT DESCRIPTION OR COMMENTS BESIDES THE CODE. Your answer contains code only ! component code only !\n' +
@@ -97,8 +95,7 @@ export async function generateComponentIteration(
           params.lastGeneratedComponent.framework
         } .${
           FRAMEWORKS_EXTENSION_MAP[
-            params.lastGeneratedComponent
-              .framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
+            params.lastGeneratedComponent.framework.toLowerCase() as keyof typeof FRAMEWORKS_EXTENSION_MAP
           ]
         } file !\n` +
         `${

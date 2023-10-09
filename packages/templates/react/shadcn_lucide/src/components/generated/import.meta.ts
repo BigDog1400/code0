@@ -7,6 +7,9 @@ export interface IComponent {
   timestamp: string;
   version: string;
   extension: string;
+  iterations: string;
+  framework: string;
+  libraries: string[];
 }
 
 export default {} as IComponent;

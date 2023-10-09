@@ -82,7 +82,149 @@ importers:
         specifier: latest
         version: 5.2.2
 
-  apps/build-service/temp/6j_0se3rinh4DMZ6E4C1z:
+  apps/cli: {}
+
+  apps/code0:
+    dependencies:
+      '@dqbd/tiktoken':
+        specifier: ^1.0.7
+        version: 1.0.7
+      '@helia/unixfs':
+        specifier: ^1.4.2
+        version: 1.4.2
+      '@rspack/cli':
+        specifier: ^0.3.6
+        version: 0.3.6(react-refresh@0.14.0)
+      '@typegoose/typegoose':
+        specifier: ^11.5.0
+        version: 11.5.1(mongoose@7.6.0)
+      '@web-std/file':
+        specifier: ^3.0.3
+        version: 3.0.3
+      '@webcontainer/api':
+        specifier: ^1.1.5
+        version: 1.1.7
+      animate.css:
+        specifier: ^4.1.1
+        version: 4.1.1
+      axios:
+        specifier: ^1.5.1
+        version: 1.5.1
+      classnames:
+        specifier: ^2.3.2
+        version: 2.3.2
+      helia:
+        specifier: ^2.0.3
+        version: 2.0.3
+      html2canvas:
+        specifier: ^1.4.1
+        version: 1.4.1
+      imagescript:
+        specifier: ^1.2.16
+        version: 1.2.16
+      jotai:
+        specifier: ^2.4.3
+        version: 2.4.3(@types/react@18.2.25)(react@18.2.0)
+      lucide-react:
+        specifier: ^0.284.0
+        version: 0.284.0(react@18.2.0)
+      mongoose:
+        specifier: ^7.5.3
+        version: 7.6.0
+      nanoid:
+        specifier: ^5.0.1
+        version: 5.0.1
+      next:
+        specifier: ^13.5.3
+        version: 13.5.4(react-dom@18.2.0)(react@18.2.0)
+      openai:
+        specifier: ^4.11.0
+        version: 4.11.1
+      puppeteer:
+        specifier: ^21.3.5
+        version: 21.3.8(typescript@5.2.2)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-query:
+        specifier: ^3.39.3
+        version: 3.39.3(react-dom@18.2.0)(react@18.2.0)
+      rollup:
+        specifier: ^3.29.4
+        version: 3.29.4
+      sharp:
+        specifier: ^0.32.6
+        version: 0.32.6
+      vite:
+        specifier: ^4.4.11
+        version: 4.4.11(@types/node@20.8.3)
+      web3.storage:
+        specifier: ^4.5.5
+        version: 4.5.5(node-fetch@3.3.2)
+      zod:
+        specifier: ^3.22.2
+        version: 3.22.4
+    devDependencies:
+      '@types/node':
+        specifier: latest
+        version: 20.8.3
+      '@types/react':
+        specifier: latest
+        version: 18.2.25
+      '@types/react-dom':
+        specifier: latest
+        version: 18.2.11
+      autoprefixer:
+        specifier: latest
+        version: 10.4.16(postcss@8.4.31)
+      eslint:
+        specifier: latest
+        version: 8.51.0
+      eslint-config-next:
+        specifier: ^13.5.3
+        version: 13.5.4(eslint@8.51.0)(typescript@5.2.2)
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.0.0(eslint@8.51.0)
+      postcss:
+        specifier: latest
+        version: 8.4.31
+      tailwindcss:
+        specifier: latest
+        version: 3.3.3
+      typescript:
+        specifier: latest
+        version: 5.2.2
+
+  apps/template-forge:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^1.2.0
+        version: 1.2.0
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      hono:
+        specifier: ^3.7.2
+        version: 3.7.5
+      mongoose:
+        specifier: ^7.5.3
+        version: 7.6.0
+      vite:
+        specifier: ^4.4.11
+        version: 4.4.11(@types/node@20.8.3)
+      web3.storage:
+        specifier: ^4.5.5
+        version: 4.5.5(node-fetch@3.3.2)
+    devDependencies:
+      tsx:
+        specifier: ^3.12.2
+        version: 3.13.0
+
+  apps/template-forge/src/temp/Q_QaEkXEeRQh9MRRmg6V7:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.3.1
@@ -259,126 +401,6 @@ importers:
       vite:
         specifier: ^4.4.5
         version: 4.4.11(@types/node@20.8.3)
-
-  apps/cli: {}
-
-  apps/code0:
-    dependencies:
-      '@dqbd/tiktoken':
-        specifier: ^1.0.7
-        version: 1.0.7
-      '@helia/unixfs':
-        specifier: ^1.4.2
-        version: 1.4.2
-      '@rspack/cli':
-        specifier: ^0.3.6
-        version: 0.3.6(react-refresh@0.14.0)
-      '@typegoose/typegoose':
-        specifier: ^11.5.0
-        version: 11.5.1(mongoose@7.6.0)
-      '@web-std/file':
-        specifier: ^3.0.3
-        version: 3.0.3
-      '@webcontainer/api':
-        specifier: ^1.1.5
-        version: 1.1.7
-      animate.css:
-        specifier: ^4.1.1
-        version: 4.1.1
-      axios:
-        specifier: ^1.5.1
-        version: 1.5.1
-      classnames:
-        specifier: ^2.3.2
-        version: 2.3.2
-      code0:
-        specifier: 'link:'
-        version: 'link:'
-      helia:
-        specifier: ^2.0.3
-        version: 2.0.3
-      html2canvas:
-        specifier: ^1.4.1
-        version: 1.4.1
-      imagescript:
-        specifier: ^1.2.16
-        version: 1.2.16
-      jotai:
-        specifier: ^2.4.3
-        version: 2.4.3(@types/react@18.2.25)(react@18.2.0)
-      lucide-react:
-        specifier: ^0.284.0
-        version: 0.284.0(react@18.2.0)
-      mongoose:
-        specifier: ^7.5.3
-        version: 7.6.0
-      nanoid:
-        specifier: ^5.0.1
-        version: 5.0.1
-      next:
-        specifier: ^13.5.3
-        version: 13.5.4(react-dom@18.2.0)(react@18.2.0)
-      openai:
-        specifier: ^4.11.0
-        version: 4.11.1
-      puppeteer:
-        specifier: ^21.3.5
-        version: 21.3.8(typescript@5.2.2)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      react-query:
-        specifier: ^3.39.3
-        version: 3.39.3(react-dom@18.2.0)(react@18.2.0)
-      rollup:
-        specifier: ^3.29.4
-        version: 3.29.4
-      sharp:
-        specifier: ^0.32.6
-        version: 0.32.6
-      vite:
-        specifier: ^4.4.11
-        version: 4.4.11(@types/node@20.8.3)
-      web3.storage:
-        specifier: ^4.5.5
-        version: 4.5.5(node-fetch@3.3.2)
-      zod:
-        specifier: ^3.22.2
-        version: 3.22.4
-    devDependencies:
-      '@types/node':
-        specifier: latest
-        version: 20.8.3
-      '@types/react':
-        specifier: latest
-        version: 18.2.25
-      '@types/react-dom':
-        specifier: latest
-        version: 18.2.11
-      autoprefixer:
-        specifier: latest
-        version: 10.4.16(postcss@8.4.31)
-      eslint:
-        specifier: latest
-        version: 8.51.0
-      eslint-config-next:
-        specifier: ^13.5.3
-        version: 13.5.4(eslint@8.51.0)(typescript@5.2.2)
-      eslint-config-prettier:
-        specifier: ^9.0.0
-        version: 9.0.0(eslint@8.51.0)
-      postcss:
-        specifier: latest
-        version: 8.4.31
-      tailwindcss:
-        specifier: latest
-        version: 3.3.3
-      typescript:
-        specifier: latest
-        version: 5.2.2
 
 packages:
 
@@ -814,6 +836,11 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    dev: false
+
+  /@hono/node-server@1.2.0:
+    resolution: {integrity: sha512-aHT8lDMLpd7ioXJ1/057+h+oE/k7rCOWmjklYDsE0jE4CoNB9XzG4f8dRHvw4s5HJFocaYDiGgYM/V0kYbQ0ww==}
+    engines: {node: '>=18.0.0'}
     dev: false
 
   /@hookform/resolvers@3.3.1(react-hook-form@7.47.0):
@@ -4526,7 +4553,6 @@ packages:
 
   /buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: false
 
   /buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
@@ -5165,6 +5191,11 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
+    engines: {node: '>=12'}
+    dev: false
 
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
@@ -6318,6 +6349,11 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
+    dev: false
+
+  /hono@3.7.5:
+    resolution: {integrity: sha512-ZaaqAul84HHLXZKwwfH+eMInidwvRj9IdyOoI5Ze0v+WUOAAtQruml3QaUUWkOuI2Myt6IZAiUqkYklLK77k4g==}
+    engines: {node: '>=16.0.0'}
     dev: false
 
   /hosted-git-info@2.8.9:
@@ -8175,6 +8211,7 @@ packages:
     requiresBuild: true
     dependencies:
       node-domexception: 2.0.1
+      prebuild-install: 7.1.1
     dev: false
     bundledDependencies:
       - prebuild-install
@@ -9549,12 +9586,10 @@ packages:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
-    dev: false
 
   /source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-    dev: false
 
   /source-map@0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
@@ -10056,6 +10091,17 @@ packages:
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: false
+
+  /tsx@3.13.0:
+    resolution: {integrity: sha512-rjmRpTu3as/5fjNq/kOkOtihgLxuIz6pbKdj9xwP4J5jOLkBxw/rjN5ANw+KyrrOXV5uB7HC8+SrrSJxT65y+A==}
+    hasBin: true
+    dependencies:
+      esbuild: 0.18.20
+      get-tsconfig: 4.7.2
+      source-map-support: 0.5.21
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
