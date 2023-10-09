@@ -13,6 +13,10 @@ export interface GeneratedComponent {
   preview: string;
 }
 
+export interface GeneratedComponentMetadata extends GeneratedComponent {
+  iterations: GeneratedComponent[]
+}
+
 export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
   {
     generationId: {

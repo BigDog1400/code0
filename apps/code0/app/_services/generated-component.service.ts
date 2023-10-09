@@ -1,6 +1,7 @@
 import clientPromise from '@/lib/database';
 import {
   GeneratedComponent,
+  GeneratedComponentMetadata,
   GeneratedComponentModel,
 } from '@/app/_models/component';
 import { NextRequest } from 'next/server';
@@ -22,4 +23,17 @@ export async function getGeneratedComponentByGenerationId(
   }
 
   return components;
+}
+
+export async function getComponentIterationsById(generationId: string): Promise<GeneratedComponentMetadata> {
+  await clientPromise;
+  const components = await GeneratedComponentModel.find({
+    generationId,
+  });
+
+  return {
+    ...components[0].toObject(),
+    iterations: components.sort(),
+  }
+  
 }
