@@ -5,6 +5,7 @@ export const messages = [
   'Mounting file system',
   'Installing dependencies',
   'Starting dev server',
+  'loaded'
 ];
 
 export const currentStateAtom = atom('');

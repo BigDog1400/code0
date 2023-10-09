@@ -29,9 +29,7 @@ export default function Loading() {
         setAnimationState(1);
 
         if (loadingMessage == messages[messages.length - 1]) {
-          setTimeout(() => {
-            setIsHidden(true);
-          }, 3000);
+          setIsHidden(true);
         }
       }, 100);
     }

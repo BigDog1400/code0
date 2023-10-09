@@ -65,7 +65,7 @@ export function PromptIterationInputForm() {
         </div>
       </div>
 
-      <div
+      {/* <div
         className={`flex flex-row items-center w-[40rem] justify-center h-6 gap-4 p-4 mt-2 rounded-3xl shadow-md bg-gradient-to-b from-gray-100 to-gray-200 ${
           state?.message ? '' : 'hidden'
         }`}
@@ -73,7 +73,7 @@ export function PromptIterationInputForm() {
         <p aria-live="polite" role="status" className="text-sm text-gray-800">
           {state?.message}
         </p>
-      </div>
+      </div> */}
     </form>
   );
 }

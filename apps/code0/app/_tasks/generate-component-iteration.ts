@@ -159,6 +159,7 @@ export async function generateComponentIteration(
     framework: params.lastGeneratedComponent.framework,
     libraries: params.lastGeneratedComponent.libraries,
     version: Number(params.lastGeneratedComponent.version) + 1,
+    preview: params.lastGeneratedComponent.preview,
   });
 
   await generatedComponent.save();

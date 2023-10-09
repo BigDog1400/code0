@@ -10,6 +10,7 @@ export interface GeneratedComponent {
   code: string;
   framework: string;
   libraries: string[];
+  preview: string;
 }
 
 export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
@@ -50,6 +51,10 @@ export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
       type: [String],
       required: true,
     },
+    preview: {
+      type: String,
+      required: false,
+    }
   },
 );
 
