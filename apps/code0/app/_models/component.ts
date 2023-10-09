@@ -6,7 +6,7 @@ export interface GeneratedComponent {
   name: string;
   prompt: string;
   timestamp?: Date;
-  version: string;
+  version: number;
   code: string;
   framework: string;
   libraries: string[];
@@ -35,7 +35,7 @@ export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
       default: Date.now,
     },
     version: {
-      type: String,
+      type: Number,
       required: true,
     },
     code: {

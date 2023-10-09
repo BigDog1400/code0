@@ -21,12 +21,16 @@ export async function processIterationPrompt(
   formData: FormData,
 ) {
   await clientPromise;
-  const iteration = await createIteration({
+  debugger;
+
+  const newCode = await createIteration({
     generationId: formData.get('generationId') as string,
     description: formData.get('prompt') as string,
   });
+
+  debugger;
   return {
     message: 'Iteration created',
-    // iteration: await createIteration(formData),
+    code: newCode,
   };
 }

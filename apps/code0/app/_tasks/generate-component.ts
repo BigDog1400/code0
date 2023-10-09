@@ -117,7 +117,7 @@ export async function generateComponent(
     slug: params.componentDesign.name,
     framework: params.framework,
     libraries: params.libraries,
-    version: '0.0.1',
+    version: params.componentDesign.version || 1,
   });
 
   await generatedComponent.save();

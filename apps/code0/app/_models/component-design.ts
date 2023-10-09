@@ -11,9 +11,10 @@ interface ComponentDesign {
     name: string;
     reason: string;
   }[];
+  version?: number;
 }
 
-interface ComponentDesignModelWithGenerationId extends ComponentDesign {
+export interface ComponentDesignModelWithGenerationId extends ComponentDesign {
   generation_id: string;
 }
 // Define a schema for the data
@@ -35,6 +36,10 @@ export const ComponentDesignSchema =
       },
     ],
     name: String,
+    version: {
+      type: Number,
+      default: 0,
+    },
   });
 
 // Create a Mongoose model using the schema

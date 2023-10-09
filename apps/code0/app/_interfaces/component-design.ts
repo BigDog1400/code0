@@ -9,4 +9,5 @@ export interface ComponentDesign {
     name: string;
     reason: string;
   }[];
+  version?: number;
 }
