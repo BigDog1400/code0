@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { WebContainer } from '@webcontainer/api';
 import templates from '../_templates';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import {
   useLoadingMessagesAtom,
 } from '../(common-layout)/(web-container)/_atoms/loading-messages-atom';
 import Loading from './loading-component';
+import html2canvas from 'html2canvas';
 
 // /** @type {import('@webcontainer/api').WebContainer}  */
 let webcontainerInstance: WebContainer;
@@ -45,6 +46,22 @@ export function WebContainerClient() {
   const [webContainerInstance, setWebContainerInstance] = useWebContainer();
   const [, setMessage] = useLoadingMessagesAtom();
   const { ['component-id']: componentId } = useParams();
+  const [loadedStatus, setLoadedStatus] = useState<'loading' | 'loaded'>(
+    'loading',
+  );
+  const [componentData, setComponentData] = useState<any>();
+
+  const iframeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    window.addEventListener('message', (message) => {
+      const { data } = message;
+      if (data && data === 'component-loaded') {
+        setLoadedStatus('loaded');
+      }
+    });
+  }, []);
+
   const [webContainerStatus, setWebContainerStatus] = useState<
     'loading' | 'booted' | 'error' | 'idle'
   >('idle');
@@ -77,6 +94,7 @@ export function WebContainerClient() {
     }
     const { data } = await axios.get(`/api/components/${componentId}`);
     loadFiles(data);
+    setComponentData(data);
   }, [componentId, loadFiles]);
 
   const bootWebContainer = useCallback(
@@ -124,10 +142,48 @@ export function WebContainerClient() {
     setWebContainerStatus,
   ]);
 
+  const handleCapture = async () => {
+    if (iframeRef.current) {
+      const canvas = document.createElement('canvas');
+      const video = document.createElement('video');
+
+      canvas.width = iframeRef.current.offsetWidth;
+      canvas.height = iframeRef.current.offsetHeight;
+
+      // Get the 2D rendering context
+      const context = canvas.getContext('2d');
+
+      const captureStream = await navigator.mediaDevices.getDisplayMedia();
+      video.srcObject = captureStream;
+
+      // Draw the content of the div onto the canvas
+
+      context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert the canvas to an image
+      const dataurl = canvas.toDataURL();
+      console.log(dataurl);
+    }
+  };
+
+  useEffect(() => {
+    if (loadedStatus === 'loaded') {
+      setMessage(messages[messages.length - 1]);
+      setTimeout(handleCapture, 1000);
+    }
+  }, [loadedStatus]);
+
   return (
-    <div className="preview w-full min-h-full flex flex-col relative">
+    <div
+      ref={iframeRef}
+      className="preview w-full min-h-full flex flex-col relative"
+    >
       <Loading />
-      <iframe className="w-full h-full flex-1" src="/loading"></iframe>
+      <iframe
+        name="preview"
+        className="w-full h-full flex-1"
+        src="/loading"
+      ></iframe>
     </div>
   );
 }

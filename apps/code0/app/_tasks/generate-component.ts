@@ -4,6 +4,7 @@ import { get_encoding } from '@dqbd/tiktoken';
 import { openai } from '../_services/openai.service';
 import clientPromise from '@/lib/database';
 import { GeneratedComponentModel } from '../_models/component';
+import { generateComponentPreview } from '../_services/images.service';
 
 const tiktokenEncoder = get_encoding('cl100k_base');
 
@@ -109,6 +110,7 @@ export async function generateComponent(
 
   cleanCode = cleanCode.trim();
   console.log('To save: ', params.libraries);
+
   const generatedComponent = new GeneratedComponentModel({
     generationId: params.generationId,
     code: cleanCode,
@@ -118,9 +120,12 @@ export async function generateComponent(
     framework: params.framework,
     libraries: params.libraries,
     version: '0.0.1',
+    preview: ''
   });
 
   await generatedComponent.save();
+
+  generateComponentPreview(params.generationId)
 
   return {
     code: cleanCode,

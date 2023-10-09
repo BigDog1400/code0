@@ -7,27 +7,6 @@ import ComponentPreview from '@/app/_components/preview-item';
 
 // `app/dashboard/page.tsx` is the UI for the `/dashboard` URL
 export default function Page() {
-  const [imagePreview, setImagePreview] = useState('');
-  const [isImagePreviewLoading, setIsImagePreviewLoading] = useState(false);
-  const { ['component-id']: componentId, componentVersion } = useParams();
-
-  const getImagePreview = async () => {
-    setIsImagePreviewLoading(true);
-    if (!componentId || !componentVersion) {
-      return;
-    }
-    try {
-      const { data } = await axios.get<{ url: string }>(
-        `/api/preview/${componentId}?componentVersion=${componentVersion}`,
-      );
-      setImagePreview(data.url);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsImagePreviewLoading(false);
-    }
-  };
-
   const components = [
     {
       prompt: 'A button component',
