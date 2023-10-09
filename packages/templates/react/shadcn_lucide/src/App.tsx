@@ -7,7 +7,7 @@ import ComponentView from "./components/views/CompoentView";
 
 const router = createHashRouter([
   {
-    path: "component/:versio",
+    path: "/component/:version",
     element: <ComponentView />,
   }
 ])

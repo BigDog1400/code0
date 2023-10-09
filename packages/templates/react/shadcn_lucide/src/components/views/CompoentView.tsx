@@ -7,8 +7,8 @@ function App() {
   const [componentImport, setComponentImport] = useState<{
     component: FC | null;
   }>({ component: null });
+  const { version } = useParams();
   useEffect(() => {
-    const { version } = useParams();
     async function getComponent() {
       try {
         const component = (
@@ -23,7 +23,7 @@ function App() {
       }
     }
     getComponent();
-  }, []);
+  }, [version]);
 
   function renderComponentSafely(Component: FC) {
     try {

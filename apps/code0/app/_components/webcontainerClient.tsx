@@ -11,6 +11,7 @@ import {
 } from '../(common-layout)/(web-container)/_atoms/loading-messages-atom';
 import Loading from './loading-component';
 import html2canvas from 'html2canvas';
+import { GeneratedComponent, GeneratedComponentMetadata } from '../_models/component';
 
 // /** @type {import('@webcontainer/api').WebContainer}  */
 let webcontainerInstance: WebContainer;
@@ -31,25 +32,24 @@ async function installDependencies() {
   return installProcess.exit;
 }
 
-async function startDevServer() {
+async function startDevServer(defaultComponent: GeneratedComponent) {
   const iframeEl = document.querySelector('iframe')!;
   // Run `npm run start` to start the Express app
   await webcontainerInstance!.spawn('pnpm', ['run', 'dev']);
 
   // Wait for `server-ready` event
   webcontainerInstance!.on('server-ready', (port, url) => {
-    iframeEl.src = url;
+    iframeEl.src = `${url}/#/component/${defaultComponent.version}`;
   });
 }
 
-export function WebContainerClient() {
+export function WebContainerClient({ componentData }:{ componentData: GeneratedComponentMetadata }) {
   const [webContainerInstance, setWebContainerInstance] = useWebContainer();
   const [, setMessage] = useLoadingMessagesAtom();
   const { ['component-id']: componentId } = useParams();
   const [loadedStatus, setLoadedStatus] = useState<'loading' | 'loaded'>(
     'loading',
   );
-  const [componentData, setComponentData] = useState<any>();
 
   const iframeRef = useRef<HTMLDivElement>(null);
 
@@ -60,42 +60,31 @@ export function WebContainerClient() {
         setLoadedStatus('loaded');
       }
     });
+    console.log(componentData)
   }, []);
 
   const [webContainerStatus, setWebContainerStatus] = useState<
     'loading' | 'booted' | 'error' | 'idle'
   >('idle');
 
-  const loadFiles = useCallback(async (componentMetadata: any) => {
+  const loadFiles = useCallback(async (componentMetadata: GeneratedComponentMetadata) => {
     const metadata = {
       ...componentMetadata,
       extension: 'tsx',
     };
-    // debugger;
-    console.log('componentMetadata', componentMetadata);
-    console.log('metadata', metadata);
-    console.log(
-      'Path inside loadFiles:',
-      `/src/components/generated/${componentMetadata.generationId}_${componentMetadata.version}.${metadata.extension}`,
-    );
-    await window.webContainer?.fs.writeFile(
-      `/src/components/generated/${metadata.generationId}_${metadata.version}.${metadata.extension}`,
-      metadata.code,
-    );
+
+    for (const component of componentMetadata.iterations) {
+      await window.webContainer?.fs.writeFile(
+        `/src/components/generated/${component.generationId}_${component.version}.${metadata.extension}`,
+        component.code,
+      );
+    }
+
     await window.webContainer?.fs.writeFile(
       `/src/components/generated/import.meta.ts`,
       `export default ${JSON.stringify(metadata)}`,
     );
   }, []);
-
-  const getComponentCodeFiles = useCallback(async () => {
-    if (!componentId) {
-      return;
-    }
-    const { data } = await axios.get(`/api/components/${componentId}`);
-    loadFiles(data);
-    setComponentData(data);
-  }, [componentId, loadFiles]);
 
   const bootWebContainer = useCallback(
     async (componentId: string) => {
@@ -116,17 +105,17 @@ export function WebContainerClient() {
       }
 
       setMessage(messages[3]);
-      await startDevServer();
+      await startDevServer({ ...componentData }.iterations.pop()!);
 
-      getComponentCodeFiles();
+      loadFiles(componentData);
     },
-    [getComponentCodeFiles, setWebContainerInstance, setMessage],
+    [setWebContainerInstance, setMessage],
   );
 
   useEffect(() => {
     if (window.webContainer) {
       setWebContainerInstance(window.webContainer);
-      getComponentCodeFiles();
+      loadFiles(componentData);
     } else {
       if (webContainerStatus === 'loading') {
         return;
@@ -137,39 +126,13 @@ export function WebContainerClient() {
     componentId,
     webContainerStatus,
     bootWebContainer,
-    getComponentCodeFiles,
     setWebContainerInstance,
     setWebContainerStatus,
   ]);
 
-  const handleCapture = async () => {
-    if (iframeRef.current) {
-      const canvas = document.createElement('canvas');
-      const video = document.createElement('video');
-
-      canvas.width = iframeRef.current.offsetWidth;
-      canvas.height = iframeRef.current.offsetHeight;
-
-      // Get the 2D rendering context
-      const context = canvas.getContext('2d');
-
-      const captureStream = await navigator.mediaDevices.getDisplayMedia();
-      video.srcObject = captureStream;
-
-      // Draw the content of the div onto the canvas
-
-      context?.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      // Convert the canvas to an image
-      const dataurl = canvas.toDataURL();
-      console.log(dataurl);
-    }
-  };
-
   useEffect(() => {
     if (loadedStatus === 'loaded') {
       setMessage(messages[messages.length - 1]);
-      setTimeout(handleCapture, 1000);
     }
   }, [loadedStatus]);
 
