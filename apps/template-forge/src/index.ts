@@ -23,7 +23,7 @@ const FRAMEWORKS_EXTENSION_MAP = {
 };
 
 const storage = new Web3Storage({
-  token: process.env.WEB3STORAGE_TOKEN,
+  token: process.env.WEB3STORAGE_TOKEN!,
 });
 
 export const addComponentTemplate = async (componentId: string) => {
@@ -40,7 +40,7 @@ export const addComponentTemplate = async (componentId: string) => {
       generationId: componentId,
     });
 
-    console.log({ components });
+    // console.log({ components });
 
     await fs.cp(templateFolder, tempFolder, { recursive: true });
 
@@ -67,7 +67,7 @@ export const addComponentTemplate = async (componentId: string) => {
             component.framework as keyof typeof FRAMEWORKS_EXTENSION_MAP
           ).toLowerCase()
         ];
-      console.log({ componentExtension });
+      // console.log({ componentExtension });
       const componentFolder = join(
         componentsFolder,
         `${component.generationId}_${component.version}.${
@@ -85,7 +85,7 @@ export const addComponentTemplate = async (componentId: string) => {
         version: component.version,
       });
 
-      console.log(componentFolder);
+      // console.log(componentFolder);
 
       await fs.writeFile(componentFolder, component.code);
     }
@@ -112,8 +112,6 @@ export const addComponentTemplate = async (componentId: string) => {
     }
 
     importsString += `export default [${literal}];`;
-
-    console.log({ importsString });
 
     await fs.writeFile(metaFile, importsString);
 
@@ -152,7 +150,6 @@ export const addComponentTemplate = async (componentId: string) => {
     console.log('Uploading to IPFS');
 
     let files = (await getFilesFromPath(distFolder)) as File[];
-    console.log({ files });
 
     files = files.map((file) => {
       // @ts-ignore
@@ -160,7 +157,7 @@ export const addComponentTemplate = async (componentId: string) => {
       return file;
     });
 
-    const rootCid = await storage.put(files);
+    const rootCid = ''//await storage.put(files);
 
     return rootCid;
   } catch (error) {
@@ -171,6 +168,7 @@ export const addComponentTemplate = async (componentId: string) => {
 };
 
 const app = new Hono();
+
 app.get('/', (c) => {
   console.log(process.env.MONGODB_URI);
   return c.json({ hello: 'world' });

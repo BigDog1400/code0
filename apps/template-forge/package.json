@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "tsx src/index.ts"
+    "start": "node --max_old_space_size=16384 node_modules/tsx/dist/cli.mjs src/index.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.2.0",
