@@ -38,3 +38,6 @@ next-env.d.ts
 .turbo
 **/clones/
 .env
+
+#temporary files
+/apps/template-forge/src/temp

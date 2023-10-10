@@ -29,10 +29,7 @@ const storage = new Web3Storage({
 export const addComponentTemplate = async (componentId: string) => {
   const tempFolder = join(__dirname, 'temp', componentId);
   const distFolder = join(tempFolder, 'dist');
-  const templateFolder = join(
-    process.cwd(),
-    '../../packages/templates/react/shadcn_lucide',
-  );
+  const templateFolder = join(process.cwd(), '../../packages/shadcn_lucide');
   const componentsFolder = join(tempFolder, 'src/components/generated');
 
   try {
@@ -133,33 +130,61 @@ export const addComponentTemplate = async (componentId: string) => {
 
     await processPromise;
 
-    const config = (
-      await import(join('file://', tempFolder, 'code0.config.js'))
-    ).default;
+    // const viteConfig = (
+    //   await import(join('file://', tempFolder, 'code0.config.js'))
+    // ).default;
 
-    // const configFile = config(join(tempFolder, 'src'));
-    // Build template
+    // Build
+    // defineConfig({
+    //   plugins: [react()],
+    //   resolve: {
+    //     alias: {
+    //       '@': resolve(__dirname, './src'),
+    //     },
+    //   },
+    // })
+    // const buildResult = await build({
+    //   root: tempFolder,
+    //   plugins: [rrea
+    // });
 
-    await build({
-      ...config,
-      root: tempFolder,
+    // calling build.js directly
+
+    // const buildProcess = spawn('node', ['build.js'], { cwd: tempFolder });
+
+    // Execute build.js script that is in the template folder. It has a buildPackage function
+    // that is async and returns a promise. We wait for that promise to resolve before continuing
+    // with the rest of the script.
+    const buildProcess = spawn('node', ['build.js'], { cwd: tempFolder });
+    const buildProcessPromise = new Promise((resolve, reject) => {
+      buildProcess.stdout.on('data', (data) => {
+        console.log(data.toString());
+      });
+      buildProcess.on('error', (error) => {
+        reject(error);
+      });
+      buildProcess.on('close', async (code) => {
+        console.log('Build process closed');
+        let files = (await getFilesFromPath(distFolder)) as File[];
+
+        files = files.map((file) => {
+          // @ts-ignore
+          file.name = file.name.replace('/dist', '');
+          return file;
+        });
+
+        const rootCid = await storage.put(files);
+
+        console.log('Root CID', rootCid);
+
+        return rootCid;
+        resolve(code);
+      });
     });
 
     // Upload to IPFS
 
     console.log('Uploading to IPFS');
-
-    let files = (await getFilesFromPath(distFolder)) as File[];
-
-    files = files.map((file) => {
-      // @ts-ignore
-      file.name = file.name.replace('/dist', '');
-      return file;
-    });
-
-    const rootCid = ''//await storage.put(files);
-
-    return rootCid;
   } catch (error) {
     console.log(error);
   } finally {
