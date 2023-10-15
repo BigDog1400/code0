@@ -4,12 +4,12 @@ import clientPromise from '@/lib/database';
 import { GenericLibraryModel } from '../_models/library';
 import { getGeneratedComponentByGenerationId } from '../_services/generated-component.service';
 import { ComponentDesignModel } from '../_models/component-design';
-import { GeneratedComponent } from '../_models/component';
+import { GeneratedComponentBase } from '../_models/component';
 // Add interface for function parameters
 interface DesignComponentFromPromptParams {
   description: string;
   generationId: string;
-  lastGeneratedComponent: GeneratedComponent;
+  lastGeneratedComponent: GeneratedComponentBase;
 }
 
 const getComponentIterationSchema = async (

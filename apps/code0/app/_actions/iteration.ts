@@ -9,6 +9,7 @@ import { AllowedFramework } from '../_models/library';
 import registeredTemplates from '../_templates/index';
 import { redirect } from 'next/navigation';
 import { createIteration } from '../_tasks/create-iteration';
+import { revalidatePath } from 'next/cache';
 
 const frameworkMap: Record<AllowedFramework, string> = {
   react: 'React',
@@ -28,9 +29,10 @@ export async function processIterationPrompt(
     description: formData.get('prompt') as string,
   });
 
-  debugger;
-  return {
-    message: 'Iteration created',
-    code: newCode,
-  };
+  revalidatePath('/generated/[component-id]');
+  redirect(
+    `/generated/${formData.get('generationId')}?version=${
+      newCode?.result?.version
+    }`,
+  );
 }

@@ -38,12 +38,12 @@ export async function createIteration({
 
   console.log('Continuing to generate component iteration');
 
-  const code = await generateComponentIteration({
+  const iteration = await generateComponentIteration({
     context: componentTaskContext,
     componentDesign: newComponentDesign,
     generationId,
     lastGeneratedComponent: lastGeneratedComponent!,
   });
 
-  return code;
+  return iteration;
 }

@@ -1,6 +1,6 @@
 import clientPromise from '@/lib/database';
 import {
-  GeneratedComponent,
+  GeneratedComponentBase,
   GeneratedComponentMetadata,
   GeneratedComponentModel,
 } from '@/app/_models/component';
@@ -14,9 +14,10 @@ export async function getGeneratedComponentByGenerationId(
   generationId: string,
 ) {
   await clientPromise;
-  const components = await GeneratedComponentModel.findOne<GeneratedComponent>({
-    generationId,
-  }).sort({ timestamp: -1 });
+  const components =
+    await GeneratedComponentModel.findOne<GeneratedComponentBase>({
+      generationId,
+    }).sort({ timestamp: -1 });
 
   if (!components) {
     return null;
@@ -25,7 +26,9 @@ export async function getGeneratedComponentByGenerationId(
   return components;
 }
 
-export async function getComponentIterationsById(generationId: string): Promise<GeneratedComponentMetadata> {
+export async function getComponentIterationsById(
+  generationId: string,
+): Promise<GeneratedComponentMetadata> {
   await clientPromise;
   const components = await GeneratedComponentModel.find({
     generationId,
@@ -34,6 +37,5 @@ export async function getComponentIterationsById(generationId: string): Promise<
   return {
     ...components[0].toObject(),
     iterations: components.sort(),
-  }
-  
+  };
 }

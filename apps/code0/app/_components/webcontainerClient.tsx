@@ -3,7 +3,7 @@ import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { WebContainer } from '@webcontainer/api';
 import templates from '../_templates';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useWebContainer } from '../(common-layout)/(web-container)/_atoms/web-container';
 import {
   messages,
@@ -12,7 +12,7 @@ import {
 import Loading from './loading-component';
 import html2canvas from 'html2canvas';
 import {
-  GeneratedComponent,
+  GeneratedComponentBase,
   GeneratedComponentMetadata,
 } from '../_models/component';
 
@@ -35,7 +35,7 @@ async function installDependencies() {
   return installProcess.exit;
 }
 
-async function startDevServer(defaultComponent: GeneratedComponent) {
+async function startDevServer(defaultComponent: GeneratedComponentBase) {
   const iframeEl = document.querySelector('iframe')!;
   // Run `npm run start` to start the Express app
   await webcontainerInstance!.spawn('pnpm', ['run', 'dev']);
@@ -51,6 +51,8 @@ export function WebContainerClient({
 }: {
   componentData: GeneratedComponentMetadata;
 }) {
+  const params = useSearchParams();
+  const version = params.get('version') || componentData.iterations[0].version;
   const [webContainerInstance, setWebContainerInstance] = useWebContainer();
   const [, setMessage] = useLoadingMessagesAtom();
   const { ['component-id']: componentId } = useParams();
@@ -58,18 +60,32 @@ export function WebContainerClient({
     'loading',
   );
 
+  useEffect(() => {
+    console.log({ loadedStatus });
+    console.log({ version });
+    if (loadedStatus !== 'loaded') {
+      return;
+    }
+    const iframeEl = document.querySelector('iframe')!;
+    // Read the iframe src domain and just change the path to /#/component/${componentVersion}
+    const url = new URL(iframeEl.src);
+    iframeEl.src = `${url.origin}/#/component/${version}`;
+  }, [version, loadedStatus]);
+
   const iframeRef = useRef<HTMLDivElement>(null);
 
   // we need to add a postMessage event in the iframe to tell the parent that the component is loaded
-  // useEffect(() => {
-  //   window.addEventListener('message', (message) => {
-  //     const { data } = message;
-  //     if (data && data === 'component-loaded') {
-  //       setLoadedStatus('loaded');
-  //     }
-  //   });
-  //   console.log(componentData)
-  // }, []);
+  useEffect(() => {
+    window.addEventListener('message', (message) => {
+      console.log({ message });
+      const { data } = message;
+
+      if (data && data === 'component-loaded') {
+        setLoadedStatus('loaded');
+      }
+    });
+    console.log(componentData);
+  }, []);
 
   const [webContainerStatus, setWebContainerStatus] = useState<
     'loading' | 'booted' | 'error' | 'idle'
@@ -116,11 +132,14 @@ export function WebContainerClient({
       }
 
       setMessage(messages[3]);
-      await startDevServer({ ...componentData }.iterations.pop()!);
+      const defaultComponentData = componentData.iterations.find(
+        (component) => component.version === Number(version),
+      );
+      await startDevServer(defaultComponentData!);
 
       loadFiles(componentData);
     },
-    [setWebContainerInstance, setMessage],
+    [setWebContainerInstance, setMessage, version, componentData, loadFiles],
   );
 
   useEffect(() => {

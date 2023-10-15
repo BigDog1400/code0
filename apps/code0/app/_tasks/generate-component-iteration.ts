@@ -4,7 +4,7 @@ import { get_encoding } from '@dqbd/tiktoken';
 import { openai } from '../_services/openai.service';
 import clientPromise from '@/lib/database';
 import { GeneratedComponentModel } from '../_models/component';
-import { GeneratedComponent } from '../_models/component';
+import { GeneratedComponentBase } from '../_models/component';
 
 const tiktokenEncoder = get_encoding('cl100k_base');
 
@@ -19,7 +19,7 @@ interface ComponentGenerationContextParams {
   componentDesign: ComponentDesign;
   context: ChatCompletionMessageParam[];
   generationId: string;
-  lastGeneratedComponent: GeneratedComponent;
+  lastGeneratedComponent: GeneratedComponentBase;
 }
 
 const getFirstContextEntry = (
@@ -159,10 +159,11 @@ export async function generateComponentIteration(
     preview: params.lastGeneratedComponent.preview,
   });
 
-  await generatedComponent.save();
+  const result = await generatedComponent.save();
 
   return {
     code: cleanCode,
     usage: response.usage,
+    result,
   };
 }

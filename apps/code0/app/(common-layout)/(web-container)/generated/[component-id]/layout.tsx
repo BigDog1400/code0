@@ -11,6 +11,7 @@ export default async function WebContainerLayout({
   params: { ['component-id']: string };
 }) {
   const { ['component-id']: componentId } = params;
+
   console.log(params);
   const data = await getComponentIterationsById(componentId);
   return (

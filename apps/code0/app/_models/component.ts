@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export interface GeneratedComponent {
+export interface GeneratedComponentBase {
   generationId: string;
   slug: string;
   name: string;
@@ -13,12 +13,16 @@ export interface GeneratedComponent {
   preview: string;
 }
 
-export interface GeneratedComponentMetadata extends GeneratedComponent {
-  iterations: GeneratedComponent[]
+export interface GeneratedComponent extends GeneratedComponentBase {
+  _id: string;
 }
 
-export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
-  {
+export interface GeneratedComponentMetadata extends GeneratedComponent {
+  iterations: GeneratedComponent[];
+}
+
+export const GeneratedComponentSchema =
+  new mongoose.Schema<GeneratedComponentBase>({
     generationId: {
       type: String,
       required: true,
@@ -58,14 +62,13 @@ export const GeneratedComponentSchema = new mongoose.Schema<GeneratedComponent>(
     preview: {
       type: String,
       required: false,
-    }
-  },
-);
+    },
+  });
 
 // Create a Mongoose model using the schema
 export const GeneratedComponentModel =
-  mongoose.models.GeneratedComponent<GeneratedComponent> ||
-  mongoose.model<GeneratedComponent>(
+  mongoose.models.GeneratedComponent<GeneratedComponentBase> ||
+  mongoose.model<GeneratedComponentBase>(
     'GeneratedComponent',
     GeneratedComponentSchema,
   );

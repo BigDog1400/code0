@@ -1,11 +1,12 @@
 'use client';
 // @ts-ignore // experimental_useFormState is not yet available in the typings, we are bleeding edge here :)
 import { experimental_useFormState as useFormState } from 'react-dom';
+// @ts-ignore // experimental_useFormState is not yet available in the typings, we are bleeding edge here :)
 import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 import { processIterationPrompt } from '../_actions/iteration';
 import { SearchCode, Sparkles } from 'lucide-react';
 import { useLoadingMessagesAtom } from '../(common-layout)/(web-container)/_atoms/loading-messages-atom';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 const initialState = {
   message: '',
@@ -31,12 +32,13 @@ export function PromptIterationInputForm() {
     initialState,
   );
   const params = useParams();
+  const searchParams = useSearchParams();
   const [loadingMessage] = useLoadingMessagesAtom();
 
   return (
     <form
       action={formAction}
-      className="absolute bottom-10 transform -translate-x-1/2 left-1/2"
+      className="absolute transform -translate-x-1/2 bottom-10 left-1/2"
     >
       <div
         className="flex flex-row items-center justify-center w-[40rem] h-12 gap-4 p-4  rounded-3xl shadow-md
@@ -48,13 +50,14 @@ export function PromptIterationInputForm() {
             <SearchCode className="text-gray-600" />
           </span>
         </div>
-        <div className="flex items-center w-full h-12  text-lg font-bold text-gray-800 rounded-3xl">
+        <div className="flex items-center w-full h-12 text-lg font-bold text-gray-800 rounded-3xl">
           <input
             placeholder="Update the component to..."
             className="flex-1 h-full bg-transparent outline-none"
             type="text"
             name="prompt"
             autoComplete="off"
+            key={searchParams.get('version')}
           />
           <input
             type="hidden"
