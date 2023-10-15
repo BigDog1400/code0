@@ -11,7 +11,10 @@ import {
 } from '../(common-layout)/(web-container)/_atoms/loading-messages-atom';
 import Loading from './loading-component';
 import html2canvas from 'html2canvas';
-import { GeneratedComponent, GeneratedComponentMetadata } from '../_models/component';
+import {
+  GeneratedComponent,
+  GeneratedComponentMetadata,
+} from '../_models/component';
 
 // /** @type {import('@webcontainer/api').WebContainer}  */
 let webcontainerInstance: WebContainer;
@@ -43,7 +46,11 @@ async function startDevServer(defaultComponent: GeneratedComponent) {
   });
 }
 
-export function WebContainerClient({ componentData }:{ componentData: GeneratedComponentMetadata }) {
+export function WebContainerClient({
+  componentData,
+}: {
+  componentData: GeneratedComponentMetadata;
+}) {
   const [webContainerInstance, setWebContainerInstance] = useWebContainer();
   const [, setMessage] = useLoadingMessagesAtom();
   const { ['component-id']: componentId } = useParams();
@@ -53,38 +60,42 @@ export function WebContainerClient({ componentData }:{ componentData: GeneratedC
 
   const iframeRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    window.addEventListener('message', (message) => {
-      const { data } = message;
-      if (data && data === 'component-loaded') {
-        setLoadedStatus('loaded');
-      }
-    });
-    console.log(componentData)
-  }, []);
+  // we need to add a postMessage event in the iframe to tell the parent that the component is loaded
+  // useEffect(() => {
+  //   window.addEventListener('message', (message) => {
+  //     const { data } = message;
+  //     if (data && data === 'component-loaded') {
+  //       setLoadedStatus('loaded');
+  //     }
+  //   });
+  //   console.log(componentData)
+  // }, []);
 
   const [webContainerStatus, setWebContainerStatus] = useState<
     'loading' | 'booted' | 'error' | 'idle'
   >('idle');
 
-  const loadFiles = useCallback(async (componentMetadata: GeneratedComponentMetadata) => {
-    const metadata = {
-      ...componentMetadata,
-      extension: 'tsx',
-    };
+  const loadFiles = useCallback(
+    async (componentMetadata: GeneratedComponentMetadata) => {
+      const metadata = {
+        ...componentMetadata,
+        extension: 'tsx',
+      };
 
-    for (const component of componentMetadata.iterations) {
+      for (const component of componentMetadata.iterations) {
+        await window.webContainer?.fs.writeFile(
+          `/src/components/generated/${component.generationId}_${component.version}.${metadata.extension}`,
+          component.code,
+        );
+      }
+
       await window.webContainer?.fs.writeFile(
-        `/src/components/generated/${component.generationId}_${component.version}.${metadata.extension}`,
-        component.code,
+        `/src/components/generated/import.meta.ts`,
+        `export default ${JSON.stringify(metadata)}`,
       );
-    }
-
-    await window.webContainer?.fs.writeFile(
-      `/src/components/generated/import.meta.ts`,
-      `export default ${JSON.stringify(metadata)}`,
-    );
-  }, []);
+    },
+    [],
+  );
 
   const bootWebContainer = useCallback(
     async (componentId: string) => {
@@ -139,12 +150,12 @@ export function WebContainerClient({ componentData }:{ componentData: GeneratedC
   return (
     <div
       ref={iframeRef}
-      className="preview w-full min-h-full flex flex-col relative"
+      className="relative flex flex-col w-full min-h-full preview"
     >
       <Loading />
       <iframe
         name="preview"
-        className="w-full h-full flex-1"
+        className="flex-1 w-full h-full"
         src="/loading"
       ></iframe>
     </div>

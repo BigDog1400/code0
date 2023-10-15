@@ -28,6 +28,7 @@ function App() {
 
   function renderComponentSafely(Component: FC) {
     try {
+      window.postMessage('component-loaded', '*');
       return <Component />;
     } catch (error) {
       // Handle the error gracefully, e.g., log it or show an error message

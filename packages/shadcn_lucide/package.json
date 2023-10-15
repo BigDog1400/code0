@@ -44,7 +44,6 @@
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "lucide-react": "^0.244.0",
-    "openv0_component_container": "link:",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-day-picker": "^8.8.2",
