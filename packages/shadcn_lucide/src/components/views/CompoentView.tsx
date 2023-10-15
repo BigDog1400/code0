@@ -2,15 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import meta from '@/components/generated/import.meta';
 import '../../App.css';
 import { useParams } from 'react-router-dom';
-import { Button } from '../ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '../ui/card';
+
 function App() {
   const [componentImport, setComponentImport] = useState<{
     component: FC | null;
@@ -46,26 +38,6 @@ function App() {
 
   return (
     <>
-      <p className="text-2xl font-semibold leading-none tracking-tight">
-        prueba
-      </p>
-      <Card>
-        <CardHeader>
-          <CardTitle>Basic</CardTitle>
-          <CardDescription>For personal use</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <h1 className="text-4xl font-bold">Free</h1>
-          <ul className="mt-4 space-y-2">
-            <li>10GB Storage</li>
-            <li>1 User</li>
-            <li>Limited Features</li>
-          </ul>
-        </CardContent>
-        <CardFooter>
-          <Button>Upgrade</Button>
-        </CardFooter>
-      </Card>
       {componentImport.component &&
         renderComponentSafely(componentImport.component)}
     </>
