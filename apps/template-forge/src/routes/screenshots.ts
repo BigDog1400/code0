@@ -3,7 +3,7 @@ import { join } from 'path';
 import puppeteer from 'puppeteer';
 import { GeneratedComponentModel } from '../../services/component';
 import fs from 'fs/promises';
-import { spawn } from 'child_process';
+import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const screenshot = new Hono();
@@ -45,14 +45,16 @@ const waitFor = async (fn: () => any, timeout: number) => {
   }
   throw new Error('Timeout exceeded');
 };
+let serverProcess: ChildProcessWithoutNullStreams | null = null;
+
 // Define a function that spawns the development server
 const startDevServer = (workingDirectory: string): Promise<void> => {
-  const serverProcess = spawn('pnpm', ['dev', '--host'], {
+  serverProcess = spawn('pnpm', ['dev', '--host'], {
     cwd: workingDirectory,
   });
 
   return new Promise<void>((resolve, reject) => {
-    serverProcess.stdout.on('data', (data) => {
+    serverProcess!.stdout.on('data', (data) => {
       console.log('Server output:', data.toString());
 
       if (data.toString().includes('Network')) {
@@ -60,12 +62,12 @@ const startDevServer = (workingDirectory: string): Promise<void> => {
       }
     });
 
-    serverProcess.on('error', reject);
+    serverProcess!.on('error', reject);
   });
 };
+
 async function generateScreenshot(generationId: string, version: string) {
   const tempFolder = join(__dirname, '../temp', generationId);
-  const distFolder = join(tempFolder, 'dist');
   const templateFolder = join(process.cwd(), '../../packages/shadcn_lucide');
   const componentsFolder = join(tempFolder, 'src/components/generated');
 
@@ -95,17 +97,17 @@ async function generateScreenshot(generationId: string, version: string) {
       componentsFolder,
       `${component.generationId}_${component.version}.${componentExtension}`,
     );
-    await fs.writeFile(componentFile, component.code, {
-      encoding: 'utf-8',
-    });
+    await fs.writeFile(componentFile, component.code);
 
-    let importsString = `import ${componentMeta.name} from './${componentMeta.generationId}_${componentMeta.version}.${componentExtension}';\n`;
-    let literal = `{ name: ${componentMeta.name}, version: '${componentMeta.version}'}`;
+    let importsString = `import ${componentMeta.name.trim()} from './${
+      componentMeta.generationId
+    }_${componentMeta.version}.${componentExtension}';\n`;
+    let literal = `{ name: ${componentMeta.name.trim()}, version: '${
+      componentMeta.version
+    }'}`;
     importsString += `export default [${literal}]`;
 
-    await fs.writeFile(metaFile, importsString, {
-      encoding: 'utf-8',
-    });
+    await fs.writeFile(metaFile, importsString);
 
     // Install dependencies
     await spawnProcess('pnpm', ['install', '.'], tempFolder);
@@ -135,8 +137,11 @@ async function generateScreenshot(generationId: string, version: string) {
       },
     });
     const cid = `${componentMeta.generationId}_${componentMeta.version}`;
-    const screenshot = await page.screenshot();
-    await S3.send(
+    const screenshot = await page.screenshot({
+      path: join(tempFolder, 'dist', `${cid}.png`),
+    });
+
+    const result = await S3.send(
       new PutObjectCommand({
         Bucket: 'code0',
         Key: `screenshots/${cid}.png`,
@@ -144,7 +149,25 @@ async function generateScreenshot(generationId: string, version: string) {
       }),
     );
 
+    // update GeneratedComponentModel with screenshot field
+    console.log(
+      'Updating GeneratedComponentModel with screenshot field with cid:',
+      cid,
+    );
+    await GeneratedComponentModel.updateOne(
+      { generationId, version: Number(version) },
+      { screenshot: `screenshots/${cid}.png` },
+    );
     await browser.close();
+
+    // Kill the server process
+    if (serverProcess) {
+      try {
+        serverProcess.kill('SIGKILL');
+      } catch (e) {
+        console.log('error killing server process', e);
+      }
+    }
 
     return cid;
   } catch (error) {

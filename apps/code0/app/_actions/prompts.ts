@@ -63,9 +63,18 @@ export async function processPrompt(prevState: any, formData: FormData) {
       generationId,
     });
 
-    console.log('Calling Forge API');
+    console.log('Calling Screenshot API');
+    //  await fetch(
+    //   `${process.env.NEXT_PUBLIC_FORGE_API_URL}/api/forge/${generationId}`,
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   },
+    // );
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FORGE_API_URL}/api/forge/${generationId}`,
+      `${process.env.NEXT_PUBLIC_FORGE_API_URL}/api/screenshot/${generationId}/1`,
       {
         method: 'POST',
         headers: {

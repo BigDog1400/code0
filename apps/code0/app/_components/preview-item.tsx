@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import Image from 'next/image';
+
 export default function ComponentPreview({
   isSelected,
   image,
@@ -30,9 +31,7 @@ export default function ComponentPreview({
       >
         <Image
           className="object-cover max-w-[167px] max-h-[600px]"
-          src={
-            'https://pub-f60900e942d94fc3967b137c2cac6e50.r2.dev/chrome_3cwe8PlOVe.png'
-          }
+          src={image}
           alt="preview"
           width={167}
           height={98}

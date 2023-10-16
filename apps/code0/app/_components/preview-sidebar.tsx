@@ -4,6 +4,12 @@ import { GeneratedComponentMetadata } from '../_models/component';
 import ComponentPreview from './preview-item';
 import { useParams, useRouter } from 'next/navigation';
 
+function generateScreenshotUrl(key: string) {
+  const url = `https://pub-f60900e942d94fc3967b137c2cac6e50.r2.dev/${key}`;
+  console.log(url);
+  return url;
+}
+
 interface PreviewSidebarProps {
   componentsData: GeneratedComponentMetadata;
   componentId: string;
@@ -20,7 +26,7 @@ export function PreviewSidebar(props: PreviewSidebarProps) {
           <ComponentPreview
             key={component._id}
             isSelected={true}
-            image="/api/preview/gateway/bafybeieprauiv2cdumlkoydzlnvmyqhbwh5vsprbf3igknsuhqqwbfkzlu/Macarena_Rivas_V._64f743b304c18cbae9964cbd__invitation.png"
+            image={generateScreenshotUrl(component.screenshot!)}
             action={() => {
               router.push(
                 `/generated/${props.componentId}?version=${component.version}`,

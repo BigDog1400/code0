@@ -11,6 +11,7 @@ export interface GeneratedComponentBase {
   framework: string;
   libraries: string[];
   preview: string;
+  screenshot?: string;
 }
 
 export interface GeneratedComponent extends GeneratedComponentBase {
@@ -60,6 +61,10 @@ export const GeneratedComponentSchema =
       required: true,
     },
     preview: {
+      type: String,
+      required: false,
+    },
+    screenshot: {
       type: String,
       required: false,
     },
