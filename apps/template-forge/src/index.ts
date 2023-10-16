@@ -9,7 +9,7 @@ import fs from 'fs/promises';
 import { build } from 'vite';
 import { GeneratedComponentModel } from '../services/component';
 import mongoose from 'mongoose';
-
+import screenshot from './routes/screenshots';
 // await mongoose.connect(process.env.MONGODB_URI!);
 (async () => {
   await mongoose.connect(process.env.MONGODB_URI!);
@@ -86,15 +86,6 @@ export const addComponentTemplate = async (componentId: string) => {
 
       await fs.writeFile(componentFolder, component.code);
     }
-
-    let names = JSON.stringify(
-      chunkNames.map((chunk) => {
-        return {
-          name: chunk.name,
-          version: chunk.version,
-        };
-      }),
-    );
 
     let literal = ``;
     let importsString = '';
@@ -203,6 +194,8 @@ app.get('/api/forge/:generationId', async (c) => {
   const cid = await addComponentTemplate(c.req.param().generationId);
   return c.json({ cid });
 });
+
+app.route('/api/screenshot', screenshot);
 
 serve({
   fetch: app.fetch,

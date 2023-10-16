@@ -6,10 +6,12 @@
     "dev": "tsx src/index.ts --dev"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.428.0",
     "@hono/node-server": "^1.2.0",
     "dotenv": "^16.3.1",
     "hono": "^3.7.2",
     "mongoose": "^7.5.3",
+    "puppeteer": "^21.3.5",
     "vite": "^4.4.11",
     "web3.storage": "^4.5.5"
   },
